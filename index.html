@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>a11ybonjour — Mini Landing</title>
+  <meta name="description" content="Mini landing, accessible and mobile-first. Semantic HTML, keyboard navigation, micro-interactions, responsive, VoiceOver tests." />
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#0b0b0b">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/icons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="shortcut icon" href="assets/icons/favicon.ico">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="js/react-widgets.js" defer></script>
+  <script src="js/i18n.js" defer></script>
+  <script src="js/script.js" defer></script>
+  <script src="js/weather.js" defer></script>
+  <script src="js/todo.js" defer></script>
+  <script src="js/audit.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="container">
+    <header class="site-header" role="banner">
+      <div class="header-row">
+        <a href="#main" class="brand-link" aria-label="Go to main content">
+          <img src="assets/img/logo-light.png" alt="" class="logo light-only" />
+          <img src="assets/img/logo-dark.png" alt="" class="logo dark-only" />
+          <span class="brand-text">A11yBonjour</span>
+        </a>
+
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">☰</button>
+
+        <nav id="site-nav" class="primary-nav" aria-label="Primary navigation">
+          <a href="#features" data-i18n="nav.features">Features</a>
+          <a href="#demos" data-i18n="nav.demos">Demos</a>
+          <a href="#about" data-i18n="nav.about">About</a>
+          <a href="#contact-form" data-i18n="nav.contact">Contact</a>
+        </nav>
+
+        <div class="controls" role="group" aria-label="Display and language">
+          <button id="themeToggle" aria-pressed="false" aria-label="Enable dark theme" title="Dark theme" class="btn-icon">
+            <span aria-hidden="true" id="themeIcon">☀️</span>
+            <span class="sr-only" id="themeLabel">Enable dark theme</span>
+          </button>
+
+          <div class="lang-switch" role="group" aria-label="Change language">
+            <button id="langEn" class="btn-icon" aria-pressed="true" aria-label="Switch language to English" title="English">🇬🇧</button>
+            <button id="langFr" class="btn-icon" aria-pressed="false" aria-label="Switch language to French" title="Français">🇫🇷</button>
+          </div>
+
+          <!-- Pink noise accessible -->
+          <button id="pinkNoiseBtn" class="btn-icon pink-noise-btn" aria-label="Play pink noise for relaxation" title="Pink noise"></button>
+          <audio id="pinkNoise" src="assets/audio/pink-noise.mp3" preload="auto" loop></audio>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="copy">
+          <h1 id="hero-title">A11yBonjour</h1>
+
+          <h2 class="hero-subtitle" data-i18n="hero.subtitle">
+            A gentle navigation for everyone
+          </h2>
+
+          <h3 class="hero-explain" data-i18n="hero.explain">
+            A11Y → A-11 letters-Y → Accessibility
+          </h3>
+
+          <p data-i18n="hero.bonjour">
+            "Bonjour", a French touch of accessibility for all
+          </p>
+
+          <p class="baseline" data-i18n="hero.tagline">
+            Design for the forgotten ones.
+          </p>
+        </div>
+
+        <div class="illus" aria-hidden="true">
+          <img src="assets/img/leo.png" alt="" width="640" height="640" loading="eager" decoding="async">
+        </div>
+      </section>
+
+      <!-- Demos grid -->
+      <section id="demos" aria-labelledby="demos-title">
+        <h2 id="demos-title" data-i18n="demos.title">Accessible demos</h2>
+        <p class="lead" data-i18n="demos.lead">Three small accessible examples to show HTML/ARIA, mobile-first CSS (light/dark), and JS with local storage.</p>
+
+        <div class="cards" role="list">
+          <article class="card" role="listitem">
+            <h3 data-i18n="demos.weather.title">Mini weather app</h3>
+            <p data-i18n="demos.weather.desc">Keyboard and screen reader navigation; small local storage and respect of reduced-motion.</p>
+            <div class="actions">
+              <a href="#weather" class="cta" data-i18n="demos.cta.view">View demo</a>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <h3 data-i18n="demos.todo.title">To-do list</h3>
+            <p data-i18n="demos.todo.desc">Semantic list roles, labels, focus; tasks persisted (localStorage).</p>
+            <div class="actions">
+              <a href="#todo" class="cta" data-i18n="demos.cta.view">View demo</a>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <h3 data-i18n="demos.audit.title">Site audit (anonymized)</h3>
+            <p data-i18n="demos.audit.desc">Mini a11y review: regions, headings, contrast, navigation, form labels.</p>
+            <div class="actions">
+              <a href="#audit" class="cta" data-i18n="demos.cta.read">Read notes</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="weather" class="demo-block" aria-labelledby="weather-title">
+        <h2 id="weather-title" data-i18n="weather.title">Mini weather app</h2>
+        <p class="lead" data-i18n="weather.lead">Accessible widget (keyboard + screen reader). Demo below.</p>
+
+        <form id="searchForm" class="wx-row" autocomplete="off" role="search" aria-label="Weather search form">
+          <label for="city" data-i18n="weather.label">City</label>
+          <input id="city" name="city" type="text" data-i18n-placeholder="weather.placeholder" placeholder="Montreal" required
+                 inputmode="search" aria-describedby="cityHelp" />
+          <button type="submit" id="submitBtn" data-i18n="weather.button">Get weather</button>
+          <button id="unitToggle" type="button" aria-pressed="false" aria-label="Switch to °F" title="weather.unitTitle" data-i18n-title="weather.unitTitle">°C</button>
+        </form>
+
+        <p id="cityHelp" class="sr-only" data-i18n="weather.cityHelp">Enter a city name then submit.</p>
+        <p id="srStatus" role="status" aria-live="polite" class="sr-only"></p>
+
+        <div id="result" class="wx-container" data-loading="false" aria-busy="false"></div>
+      </section>
+
+      <section id="todo" class="demo-block" aria-labelledby="todo-title">
+        <h2 id="todo-title" data-i18n="todo.title">To-do list</h2>
+        <p class="lead" data-i18n="todo.lead">Semantic list roles, focus handled, tasks persisted (localStorage).</p>
+
+        <div class="todo-app" role="application" aria-label="Task manager">
+          <form id="todo-form">
+            <label for="todo-input" class="visually-hidden" data-i18n="todo.add">Add</label>
+            <input id="todo-input" type="text" data-i18n-placeholder="todo.placeholder" placeholder="e.g., Call the pharmacy" />
+            <button type="submit" aria-label="Add task" data-i18n="todo.add">Add</button>
+          </form>
+
+          <ul id="todo-list" aria-label="Task list"></ul>
+          <p id="empty" class="empty" hidden data-i18n="todo.empty">No tasks ✨</p>
+          <p id="task-count" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="audit" class="outline-hover" aria-labelledby="audit-title">
+        <h2 id="audit-title" data-i18n="demos.audit.title">A11Y Audit — LGBTQIA+ media (anonymized)</h2>
+        <p class="lead" data-i18n="demos.audit.desc">
+          Date: September 23, 2025 — Method: manual tests (keyboard, VoiceOver), DOM inspection, quick checks (contrast, headings, ARIA).
+        </p>
+      </section>
+
+      <section id="features" class="outline-hover" aria-labelledby="features-title">
+        <h2 id="features-title">
+          <span data-i18n="features.title">Key features</span>
+          <span class="muted" data-i18n="features.soon">(coming soon)</span>
+        </h2>
+        <ul class="features-list">
+          <li data-i18n="features.reading">Reading mode</li>
+          <li data-i18n="features.break">Mental break button</li>
+          <li data-i18n="features.profiles">Persistent profiles</li>
+        </ul>
+      </section>
+      
+
+      <section id="about" class="outline-hover" aria-labelledby="about-title">
+        <h2 id="about-title" data-i18n="about.title">Our approach</h2>
+        <p data-i18n="about.p1">Human-centered design, user testing and privacy-by-default. This prototype is our learning workshop.</p>
+        <p data-i18n="about.p2">A pink circle, a white globe: a deliberate simplicity. Behind the clear form, a story of inclusivity and openness, with visual accessibility and minimalism at the core. Inspired by two icons: unapologetic freedom and tender honesty. A manifesto against judgment — from others, society, and ourselves.</p>
+        <p data-i18n="about.p3">It also signals my cosmopolitan personality and remote work, through a united and connected world. 🌍✨</p>
+        <p data-i18n="about.p4">Think in complex, ship in simple, keep humans at the center.</p>
+        <p data-i18n="about.p5">A subtle Memphis A11Y easter egg links the logo to the pink sound, like a calm and playful touch. 🎵🌸</p>
+      </section>
+
+      <form id="contact-form" action="https://formspree.io/f/xzzjbnkb" method="POST" aria-describedby="contact-help contact-status" novalidate>
+        <p id="contact-help" class="lead" data-i18n="contact.lead">Leave your email to be notified of updates.</p>
+
+        <label for="email" data-i18n="contact.email">Your email</label><br>
+        <div class="contact-row">
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
+          <button type="submit" id="contact-submit" data-i18n="contact.button">Send</button>
+        </div>
+
+        <!-- Honeypot -->
+        <div class="sr-only" aria-hidden="true">
+          <label for="website">Do not fill</label>
+          <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <p id="contact-status" class="sr-only" aria-live="polite"></p>
+      </form>
+    </main>
+
+    <footer role="contentinfo">
+      <small data-i18n="footer.copy">© 2025 a11ybonjour</small>
+    </footer>
+  </div>
+
+  <button id="scrollTopBtn" class="scrolltop" aria-label="Back to top">↑</button>
+</body>
+</html>

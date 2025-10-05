@@ -1,0 +1,388 @@
+/* ========================
+   ROOT TOKENS
+======================== */
+:root{
+  --radius:14px;
+  --gap:1rem;
+  --maxw:1040px;
+  --focus:#2563eb;
+  --hover-white:#ffffff;
+  --light-border:#111;
+  --dark-border:#fff;
+}
+
+/* ========================
+   THEMES (via data-theme)
+======================== */
+:root[data-theme="light"]{
+  --bg:#ffffff;
+  --fg:#141414;
+  --muted:#666;
+  --surface:#ffffff;
+  --accent:#0f172a;
+  --accent-contrast:#ffffff;
+  --current-bg:#111;
+  --current-fg:#fff;
+  --text: var(--fg);
+  --block-bg: var(--surface);
+  --hover-border: var(--light-border);
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0f172a;
+  --fg:#f8fafc;
+  --muted:#94a3b8;
+  --surface:#0f172a;
+  --accent:#ffffff;
+  --accent-contrast:#0f172a;
+  --current-bg:#0b1220;
+  --current-fg:#e6edf3;
+  --text: var(--fg);
+  --block-bg: var(--surface);
+  --hover-border: var(--dark-border);
+  color-scheme:dark;
+}
+
+/* ========================
+   GLOBAL RESET & BASE
+======================== */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html:focus-within{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html:focus-within{scroll-behavior:auto}
+  *{animation:none!important;transition:none!important}
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--fg);
+  font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+}
+@supports (-webkit-touch-callout:none){
+  input,select,textarea,button{font-size:16px}
+}
+.sr-only,.visually-hidden{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip-link:focus{position:fixed;left:12px;top:12px;z-index:999;background:#fff;border:2px solid var(--accent);padding:.5rem .75rem;border-radius:10px;color:#111}
+:where(a,button,input,select,textarea,[role="button"]):focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* ========================
+   LAYOUT
+======================== */
+.container{max-width:var(--maxw);margin-inline:auto;padding:clamp(12px,2vw,24px)}
+main{display:block}
+section{margin-top:clamp(16px,3vw,32px)}
+section:target{scroll-margin-top:5rem}
+
+/* ========================
+   HEADER / NAV
+======================== */
+.site-header{position:sticky;top:0;background:var(--bg);z-index:50;border-bottom:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%)}
+.header-row{display:flex;align-items:center;gap:.5rem;padding:.5rem .25rem}
+.brand-link{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:var(--fg)}
+.logo{height:80px;width:auto}
+.brand-text{font-weight:800;letter-spacing:.2px}
+.dark-only{display:none}
+.light-only{display:block}
+:root[data-theme="dark"] .dark-only{display:block}
+:root[data-theme="dark"] .light-only{display:none}
+.nav-toggle{
+  margin-left:auto;-webkit-appearance:none;appearance:none;background:transparent;border:1px solid transparent;border-radius:10px;
+  padding:.35rem .6rem;cursor:pointer;color:inherit;font-size:1.1rem;
+}
+.primary-nav{display:none;gap:.5rem;flex-wrap:wrap}
+.primary-nav a{padding:.45rem .65rem;border-radius:999px;text-decoration:none;color:var(--fg)}
+@media (min-width:768px){
+  .nav-toggle{display:none}
+  .primary-nav{display:flex;margin-left:auto}
+}
+.primary-nav[data-open="true"]{display:flex}
+.controls{display:flex;align-items:center;gap:.35rem;margin-left:.25rem}
+.btn-icon{
+  -webkit-appearance:none;appearance:none;background:transparent;border:1px solid transparent;border-radius:10px;
+  padding:.35rem .5rem;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.05rem;color:inherit;
+}
+.lang-switch .btn-icon[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px;}
+#themeIcon{font-family:system-ui,"Segoe UI Symbol","Apple Symbols","Noto Sans Symbols",Arial,sans-serif;font-size:1.1rem}
+.pink-noise-btn{position:relative;width:40px;height:40px}
+.pink-noise-btn::before{
+  content:'';position:absolute;left:15px;top:10px;width:0;height:0;
+  border-left:16px solid #ec4899;border-top:10px solid transparent;border-bottom:10px solid transparent;
+}
+.pink-noise-btn.pause::before{display:none}
+.pink-noise-btn.pause::after{
+  content:'';position:absolute;left:12px;top:10px;width:6px;height:20px;background:#ec4899;box-shadow:12px 0 0 #ec4899;
+}
+
+/* ========================
+   TYPO & LINKS
+======================== */
+h1{font-size:clamp(1.6rem,4.5vw,2.6rem);margin:.25rem 0 .5rem;line-height:1.2}
+h2{font-size:clamp(1.2rem,3vw,1.8rem);margin:0 0 .5rem}
+h3{font-size:clamp(1rem,2.5vw,1.2rem);margin:.25rem 0 .5rem;color:var(--muted)}
+a:hover{filter:brightness(0.95)}
+a:active{transform:translateY(1px)}
+.baseline{margin:.5rem 0 1rem;color:var(--muted);font-style:italic}
+.lead{color:var(--muted);margin:0 0 1rem}
+
+/* ========================
+   HERO
+======================== */
+.hero{
+  margin-top:clamp(8px,2vw,16px);
+  padding:clamp(16px,3vw,28px);
+  border-radius:var(--radius);
+  background:var(--surface);
+  border:1px solid transparent;
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+:root[data-theme="light"] .hero:hover{
+  background:var(--hover-white);
+  border-color:color-mix(in oklab, var(--fg), var(--bg) 80%);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  outline:1px solid var(--light-border);
+}
+:root[data-theme="dark"] .hero:hover{
+  background:var(--surface);
+  border-color:transparent;
+  box-shadow:none;
+  outline:1px solid var(--dark-border);
+}
+.illus img{display:block;width:100%;height:auto;border-radius:var(--radius)}
+@media (min-width:700px){
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:var(--gap)}
+}
+
+/* ========================
+   CARDS
+======================== */
+.cards{display:grid;gap:clamp(12px,2.5vw,18px);grid-template-columns:1fr}
+.card{
+  background:var(--surface);
+  border:1px solid transparent;
+  border-radius:var(--radius);
+  padding:clamp(12px,2.5vw,18px);
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .15s ease;
+}
+:root[data-theme="light"] .card:hover,
+:root[data-theme="light"] .card:focus-within{
+  background:var(--hover-white);
+  border-color:color-mix(in oklab, var(--fg), var(--bg) 80%);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  transform:translateY(-1px);
+  outline:1px solid var(--light-border);
+}
+:root[data-theme="dark"] .card:hover,
+:root[data-theme="dark"] .card:focus-within{
+  background:var(--surface);
+  border-color:transparent;
+  box-shadow:none;
+  outline:1px solid var(--dark-border);
+}
+.card h3{margin:.25rem 0 .5rem}
+.card .actions{margin-top:.75rem}
+@media (min-width:720px){
+  #demos .cards{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ========================
+   CTA
+======================== */
+.cta{
+  display:inline-block;border:2px solid var(--fg);padding:.65rem 1rem;border-radius:12px;font-weight:700;text-decoration:none;color:var(--fg);
+  transition:background .2s ease,color .2s ease,box-shadow .2s ease,transform .15s ease;
+}
+.cta:hover{background:var(--hover-white);color:#111;box-shadow:0 6px 16px rgba(0,0,0,.08)}
+.cta:active{transform:translateY(1px)}
+
+/* ========================
+   DEMO BLOCKS
+======================== */
+.demo-block{
+  background:var(--surface);
+  border:1px solid transparent;
+  border-radius:var(--radius);
+  box-shadow:none;
+  padding:clamp(12px,2.5vw,18px);
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.demo-block .block{
+  display:block;
+  background:var(--block-bg);
+  color:var(--text);
+  border:2px solid transparent;
+  border-radius:var(--radius);
+  outline:none;
+  transition:border-color .15s ease;
+}
+:root[data-theme="light"] .demo-block .block:hover,
+:root[data-theme="light"] .demo-block .block:focus-within{border-color:var(--light-border)}
+:root[data-theme="dark"] .demo-block .block:hover,
+:root[data-theme="dark"] .demo-block .block:focus-within{border-color:var(--dark-border)}
+.outline-hover{
+  background:var(--surface);
+  border:1px solid transparent;
+  border-radius:var(--radius);
+  padding:clamp(16px,3vw,28px);
+  margin-top:clamp(20px,4vw,40px);
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .15s ease;
+}
+:root[data-theme="light"] .outline-hover:hover,
+:root[data-theme="light"] .outline-hover:focus-within{
+  background:var(--hover-white);
+  border-color:color-mix(in oklab, var(--fg), var(--bg) 80%);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  outline:1px solid var(--light-border);
+  transform:translateY(-1px);
+}
+:root[data-theme="dark"] .outline-hover:hover,
+:root[data-theme="dark"] .outline-hover:focus-within{
+  background:var(--surface);
+  border-color:transparent;
+  box-shadow:none;
+  outline:1px solid var(--dark-border);
+}
+#weather,#todo{
+  background:var(--surface);
+  border:1px solid transparent;
+  border-radius:var(--radius);
+  padding:clamp(16px,3vw,28px);
+  margin-top:clamp(20px,4vw,40px);
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .15s ease;
+}
+:root[data-theme="light"] #weather:hover,
+:root[data-theme="light"] #todo:hover{
+  background:var(--hover-white);
+  border-color:color-mix(in oklab, var(--fg), var(--bg) 80%);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  outline:1px solid var(--light-border);
+  transform:translateY(-1px);
+}
+:root[data-theme="dark"] #weather:hover,
+:root[data-theme="dark"] #todo:hover{
+  background:var(--surface);
+  border-color:transparent;
+  box-shadow:none;
+  outline:1px solid var(--dark-border);
+}
+
+/* ========================
+   WEATHER
+======================== */
+#weather .wx-row{
+  display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:center
+}
+#weather label{grid-column:1/-1;font-weight:600}
+#weather input,#weather button{
+  padding:10px 12px;border-radius:var(--radius);border:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);
+  background:var(--bg);color:var(--fg);min-height:44px;font:inherit
+}
+#weather #unitToggle{width:48px;text-align:center;padding:0;font-weight:600}
+#weather .wx-container{max-width:640px;padding:16px;margin:0;background:transparent;border-radius:var(--radius)}
+#weather .card{
+  padding:16px;border:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);border-radius:var(--radius);background:var(--bg)
+}
+#weather .temp{font-size:2.2rem;margin:.2rem 0}
+#weather .error{color:#b00020;font-weight:600}
+#weather input:focus-visible,#weather button:focus-visible{
+  outline:2px solid color-mix(in oklab, var(--fg), var(--bg) 30%);outline-offset:2px
+}
+
+/* ========================
+   TODO
+======================== */
+#todo .todo-app{display:block}
+#todo .todo-app form{display:grid;grid-template-columns:1fr auto;gap:var(--gap);margin-bottom:var(--gap)}
+#todo .todo-app input[type="text"]{
+  padding:.65rem .8rem;border-radius:10px;border:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);background:var(--bg);color:var(--fg);font:inherit
+}
+#todo .todo-app button{
+  padding:.6rem .9rem;border-radius:10px;border:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);background:var(--bg);color:var(--fg);font-weight:600;cursor:pointer
+}
+#todo .todo-app button:hover,
+#todo .icon-btn:hover{background:color-mix(in oklab, var(--bg), var(--fg) 3%)}
+#todo .todo-app ul{list-style:none;margin:0;padding:0}
+#todo #todo-list:empty{display:none}
+#todo .todo-app li{
+  display:grid;grid-template-columns:auto 1fr auto;gap:var(--gap);align-items:center;
+  padding:.6rem .4rem;border-bottom:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);border-radius:10px
+}
+#todo .todo-app li:hover{background:color-mix(in oklab, var(--surface), var(--fg) 5%)}
+#todo .todo-app input[type="checkbox"]{accent-color:var(--accent);width:1.05rem;height:1.05rem;cursor:pointer}
+#todo .todo-app .done{text-decoration:line-through;color:var(--muted)}
+#todo .todo-app .empty{text-align:center;color:var(--muted);padding:.5rem 0}
+#todo .icon-btn{
+  background:var(--bg);border:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);cursor:pointer;font-size:1.1rem;line-height:1;padding:.25rem;border-radius:8px;color:var(--fg)
+}
+
+/* ========================
+   AUDIT
+======================== */
+#audit .accordion{display:grid;gap:.75rem;margin-top:.75rem}
+#audit .acc-item{border:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);border-radius:var(--radius);background:var(--surface)}
+#audit .acc-btn{
+  width:100%;text-align:left;background:transparent;border:0;padding:.9rem 1rem;font:inherit;font-weight:700;cursor:pointer;display:grid;grid-template-columns:1fr auto;align-items:center
+}
+#audit .acc-btn .chev{transition:transform .2s ease}
+#audit .acc-btn[aria-expanded="true"] .chev{transform:rotate(90deg)}
+#audit .acc-panel{padding:.25rem 1rem 1rem}
+
+/* ========================
+   FEATURES
+======================== */
+.features-list{
+  list-style:none;padding:0;margin:.5rem 0 0;display:grid;gap:.35rem
+}
+.features-list li{
+  font-size:.95rem;padding:.35rem .5rem;border-bottom:1px solid color-mix(in oklab, var(--fg), var(--surface) 80%);transition:background .2s
+}
+.features-list li:last-child{border-bottom:none}
+.features-list li:hover{background:color-mix(in oklab, var(--surface), var(--fg) 5%);border-radius:4px}
+
+/* ========================
+   CONTACT
+======================== */
+#contact-form{
+  background:var(--surface);
+  border:1px solid color-mix(in oklab, var(--fg), var(--bg) 90%);
+  border-radius:var(--radius);
+  padding:clamp(16px,3vw,28px);
+  margin-top:clamp(16px,3vw,32px)
+}
+#contact-form .contact-row{display:grid;grid-template-columns:1fr auto;gap:.75rem;max-width:500px;margin-top:.5rem}
+#contact-form input[type="email"]{
+  padding:.65rem .8rem;border-radius:var(--radius);border:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);background:var(--bg);color:var(--fg);font:inherit;min-height:44px;width:100%;box-shadow:0 2px 4px rgba(0,0,0,.04)
+}
+#contact-form button[type="submit"]{
+  border:2px solid var(--fg);padding:.65rem 1rem;border-radius:12px;font-weight:700;background:transparent;color:var(--fg);cursor:pointer;font:inherit;transition:all .2s ease;min-height:44px;white-space:nowrap
+}
+#contact-form button[type="submit"]:hover{background:var(--hover-white);color:#111;box-shadow:0 6px 16px rgba(0,0,0,.08)}
+#contact-status{margin-top:.5rem;color:var(--muted)}
+@media (max-width:600px){#contact-form .contact-row{grid-template-columns:1fr}}
+
+/* ========================
+   FOOTER
+======================== */
+footer{margin-top:clamp(24px,5vw,48px);padding-top:12px;border-top:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);color:var(--muted)}
+
+/* ========================
+   SCROLL TO TOP
+======================== */
+.scrolltop{
+  position:fixed;bottom:20px;right:20px;background-color:#ff4fa3;color:white;border:none;border-radius:50%;width:48px;height:48px;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,0.2);transition:opacity .3s ease;opacity:0;pointer-events:none
+}
+.scrolltop.show{opacity:1;pointer-events:auto}
+.scrolltop:focus{outline:2px solid white;outline-offset:2px}
+
+/* ========================
+   SMALL SCREENS
+======================== */
+@media (max-width:375px){
+  body{font-size:15px}
+  .brand-text{display:none}
+  .logo{height:36px}
+  .primary-nav a{padding:.4rem .55rem}
+}
