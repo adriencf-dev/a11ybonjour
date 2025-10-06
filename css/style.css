@@ -10,7 +10,7 @@
   --light-border:#111;
   --dark-border:#fff;
 }
-
+img, svg {max-width:100%;height:auto;display:block}
 /* ========================
    THEMES (via data-theme)
 ======================== */
@@ -83,7 +83,10 @@ section:target{scroll-margin-top:5rem}
 .site-header{position:sticky;top:0;background:var(--bg);z-index:50;border-bottom:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%)}
 .header-row{display:flex;align-items:center;gap:.5rem;padding:.5rem .25rem}
 .brand-link{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:var(--fg)}
-.logo{height:80px;width:auto}
+.logo{height:40px;width:auto; display: block}
+@media (min-width: 1024px) {
+.logo {height: 80px;width: auto;}
+}
 .brand-text{font-weight:800;letter-spacing:.2px}
 .dark-only{display:none}
 .light-only{display:block}
