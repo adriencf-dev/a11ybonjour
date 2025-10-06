@@ -325,13 +325,16 @@ a:active{transform:translateY(1px)}
    AUDIT
 ======================== */
 #audit .accordion{display:grid;gap:.75rem;margin-top:.75rem}
-#audit .acc-item{border:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);border-radius:var(--radius);background:var(--surface)}
-#audit .acc-btn{
-  width:100%;text-align:left;background:transparent;border:0;padding:.9rem 1rem;font:inherit;font-weight:700;cursor:pointer;display:grid;grid-template-columns:1fr auto;align-items:center
-}
+#audit .acc-item{border:1px solid color-mix(in oklab,var(--fg),var(--bg)85%);border-radius:var(--radius);background:var(--surface)}
+#audit .acc-btn{width:100%;text-align:left;background:transparent;border:0;padding:.9rem 1rem;font:inherit;font-weight:700;cursor:pointer;display:grid;grid-template-columns:1fr auto;align-items:center;color:var(--fg);-webkit-appearance:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}
+#audit .acc-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#audit .acc-btn[aria-expanded="true"]{color:var(--fg)}
 #audit .acc-btn .chev{transition:transform .2s ease}
 #audit .acc-btn[aria-expanded="true"] .chev{transform:rotate(90deg)}
 #audit .acc-panel{padding:.25rem 1rem 1rem}
+#audit details>summary{color:var(--fg);list-style:none;-webkit-appearance:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}
+#audit details>summary::-webkit-details-marker{display:none}
+#audit details[open]>summary{color:var(--fg)}
 
 /* ========================
    FEATURES
