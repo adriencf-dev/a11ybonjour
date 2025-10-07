@@ -372,13 +372,13 @@ a:active{transform:translateY(1px)}
 /* ========================
    FOOTER
 ======================== */
-footer{margin-top:clamp(24px,5vw,48px);padding-top:12px;border-top:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);color:var(--muted)}
-footer small {font-size: .9rem;letter-spacing: .3px;font-variant-caps: normal;font-weight: 400;text-transform: none;}
-footer strong {font-weight: 600;color: var(--accent);transition: color .2s ease;}
-footer strong:hover {color: var(--focus);}
-.footer-link {text-decoration: none;color: var(--accent);transition: color 0.3s ease;}
-.footer-link:hover,
-.footer-link:focus {color: var(--focus);text-decoration: underline;}
+footer{margin-top:clamp(24px,5vw,48px);padding-top:12px;border-top:1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);color:var(--muted,#666);}
+.footer-text{font-size:.9rem;letter-spacing:.3px;font-variant-caps:normal;font-weight:400;text-transform:none;margin:0;}
+footer strong{font-weight:600;color:var(--accent);transition:color .2s ease;}
+footer strong:hover{color:var(--focus);}
+.footer-link{text-decoration:none;color:var(--accent);transition:color .3s ease;}
+.footer-link:hover,.footer-link:focus{color:var(--focus);text-decoration:underline;}
+
 /* ========================
    SCROLL TO TOP
 ======================== */
