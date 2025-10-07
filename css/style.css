@@ -376,7 +376,9 @@ footer{margin-top:clamp(24px,5vw,48px);padding-top:12px;border-top:1px solid col
 footer small {font-size: .9rem;letter-spacing: .3px;font-variant-caps: normal;font-weight: 400;text-transform: none;}
 footer strong {font-weight: 600;color: var(--accent);transition: color .2s ease;}
 footer strong:hover {color: var(--focus);}
-
+.footer-link {text-decoration: none;color: var(--accent);transition: color 0.3s ease;}
+.footer-link:hover,
+.footer-link:focus {color: var(--focus);text-decoration: underline;}
 /* ========================
    SCROLL TO TOP
 ======================== */
