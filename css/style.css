@@ -374,12 +374,11 @@ a:active{transform:translateY(1px)}
 ======================== */
 footer {margin-top: clamp(24px, 5vw, 48px);padding-top: 12px;border-top: 1px solid color-mix(in oklab, var(--fg), var(--bg) 85%);color: var(--muted, #666);}
 .footer-text {font-size: .9rem;letter-spacing: .3px;font-variant-caps: normal;font-weight: 400;text-transform: none;margin: 0;}
-footer strong {font-weight: 600;color: var(--accent);transition: color .2s ease;text-decoration: none;}
-footer strong:hover,
-footer strong:focus {color: var(--focus);text-decoration: none;}
-.footer-link {text-decoration: none;color: var(--accent);transition: color 0.3s ease;}
-.footer-link:hover,
-.footer-link:focus-visible {color: var(--focus);text-decoration: underline;text-underline-offset: 2px;}
+footer strong {font-weight: 600;color: var(--accent);text-decoration: none;transition: none;}
+footer strong:hover, footer strong:focus {color: var(--accent);text-decoration: none;}
+.footer-link {text-decoration: none;color: var(--accent);transition: text-decoration-color .3s ease;}
+.footer-link:hover, .footer-link:focus-visible {color: var(--accent);text-decoration: underline;text-decoration-color: var(--accent);text-underline-offset: 2px;}
+.footer-link:visited {color: var(--accent);text-decoration: none;}
 
 /* ========================
    SCROLL TO TOP
