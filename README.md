@@ -45,3 +45,12 @@ Dark-first, local-first, and privacy-respectful.
 
 ## Structure
 
+/
+├─ index.html          → Calm home (Vanilla JS)
+├─ lab.html            → React island demos
+├─ styles/             → Main CSS (dark-first, semantic)
+├─ js/                 → Home scripts (forms, AOHZY, TTS, transitions)
+├─ lab/                → React islands + mount logic
+└─ README.md
+
+
