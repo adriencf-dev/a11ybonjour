@@ -30,16 +30,23 @@
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 
+/* === Fond : sur html (mobile-safe) === */
+html {
+  background-color: var(--bg);
+  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll; /* no fixed on mobile */
+}
+
+/* === Body = contenu (pas de fond) + isolation pour la pile === */
 body {
   margin: 0;
   font: 400 1rem/1.65 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
   color: var(--text);
-  background-color: var(--bg);
-  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
-  
+  background: none;            /* important */
+  isolation: isolate;          /* sécurise les z-index enfants */
 }
-
-
 
 /* A11Y helpers */
 .visually-hidden { position: absolute !important; clip: rect(1px,1px,1px,1px); clip-path: inset(50%); height: 1px; width: 1px; overflow: hidden; white-space: nowrap; }
@@ -75,7 +82,6 @@ body {
 .hero .subtitle { color: var(--muted); margin: 0.25rem 0; }
 .lede { font-size: 1.125rem; color: var(--muted); }
 
-
 /* Cards grid */
 .cards {
   display: grid;
@@ -104,18 +110,16 @@ body {
   flex-direction: column;
   gap: .75rem;
 
-  contain: paint;        
-  z-index: 0;             
+  contain: paint;
+  z-index: 1; /* contenu au-dessus du fond */
 }
 
 .card h3 { margin-top: 0; }
 
-/* iOS-only nudge (optional) */
-/* @supports détecte un truc WebKit typique pour cibler iOS sans hack user-agent */
+/* iOS-only nudge */
 @supports (-webkit-touch-callout: none) {
-  .card { contain: paint; /* or: transform: translateZ(0); */ }
+  .card { contain: paint; /* ou: transform: translateZ(0); */ }
 }
-
 
 .btn-row {
   display: flex;
@@ -150,7 +154,7 @@ legend { padding: 0 .5rem; color: var(--muted); font-size: .95rem; }
 
 /* Text blocks */
 .demo-text.calm { letter-spacing: 0.01em; line-height: 1.85; }
-.breath blockquote { font-style: italic; color: var(--muted); border-left: 3px solid var(--accent); padding-left: .75rem; }
+.breath blockquote { font-style: italic; color: var(--muted); border-left: 3px solid #7DA7D9; padding-left: .75rem; }
 .prose { color: var(--text); }
 .manifest-list { display: grid; gap: .5rem; padding-left: 1rem; }
 .bridge { margin-top: var(--space-lg); color: var(--muted); font-size: 1.05rem; }
@@ -205,7 +209,7 @@ input:focus, textarea:focus, select:focus { outline: none; box-shadow: var(--foc
   width: min(380px, 92vw);
   display: grid;
   gap: .5rem;
-  z-index: 10000;
+  z-index: 10000; /* OK, au-dessus du contenu */
   pointer-events: none;
 }
 .toaster-stack .toast-card {
@@ -278,43 +282,18 @@ a {
 .cbx [role="option"][data-active="true"] { background: #1a1f26; border-radius: 8px; }
 .cbx [role="option"] { padding: 6px 8px; cursor: pointer; }
 
-/* === Patch mobile-safe fond & couches === */
-
-/* 1) Déplacer le fond sur html (plus stable sur mobile) */
-html {
-  background-color: var(--bg);
-  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: scroll;   /* important: pas de fixed en mobile */
-}
-
-/* 2) Body = contenu seulement, et iso pour sécuriser les couches */
-body {
-  background: none !important;     /* enlève le fond du body */
-  isolation: isolate;              /* crée un contexte propre pour les z-index enfants */
-}
-
-/* 3) S'assurer que le contenu passe AU-DESSUS du fond */
-header, main, .section, .cards, .card, footer {
-  position: relative;
-  z-index: 1;
-}
-
-/* 4) Neutraliser les stacking contexts parasites en mobile */
+/* === Mobile-specific safe-guards === */
 @media (hover: none) and (pointer: coarse) {
-  .chapters { z-index: 2; }        /* si tu veux garder visible ce widget */
+  .chapters { z-index: 2; }
   .wrapper, .container {
     transform: none !important;
     filter: none !important;
     will-change: auto !important;
   }
-  /* Option: la card reste clean sans créer d'effets de bord */
-  .card { contain: paint; z-index: 1; }
+  .card { z-index: 1; contain: paint; }
 }
 
-/* 5) (Option desktop) Réactiver un "parallaxe" si souhaité */
+/* === Desktop: réactiver un parallaxe si tu veux === */
 @media (hover: hover) and (pointer: fine) {
   html { background-attachment: fixed; }
 }
-
