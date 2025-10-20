@@ -302,3 +302,24 @@ if (!('showPopover' in HTMLDialogElement.prototype)) {
     });
   });
 }
+
+let initialLoad = true;
+
+function showStep(i) {
+  steps.forEach((s, idx) => { s.hidden = idx !== i; });
+
+  
+  if (!initialLoad) {
+    const first = steps[i].querySelector('input, textarea, button');
+    first?.focus();
+  }
+
+  const status = form.querySelector('.form-status');
+  if (status) status.textContent = `Step ${i + 1} of ${steps.length}`;
+}
+
+...
+
+
+showStep(current);
+initialLoad = false;
