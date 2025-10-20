@@ -354,3 +354,40 @@ html::before {
   }
 }
 
+/* === Hard override mobile: calques & animations === */
+@media (hover: none) and (pointer: coarse) {
+  /* 1) Fond : pas de promotion GPU ni de fixed, et SOUS tout */
+  body::before,
+  html::before {
+    position: absolute !important;   /* au lieu de fixed en mobile */
+    z-index: -1 !important;
+    transform: none !important;      /* retire translateZ(0) */
+    will-change: auto !important;
+    min-height: 100dvh;
+  }
+
+  /* 2) Le contenu ne crée pas de "barrières" de peinture */
+  .card {
+    contain: initial !important;     /* annule contain: paint sur mobile */
+    z-index: 1;                      /* garde le contenu au-dessus */
+  }
+
+  /* 3) Neutralise les animations liées au scroll (contexte de peinture) */
+  [data-scroll-breathe] { 
+    animation: none !important; 
+  }
+
+  /* 4) Sécurité largeur (si bande due à une fuite de largeur) */
+  html, body { 
+    width: 100%; 
+    overflow-x: hidden; 
+    height: auto; 
+    min-height: 100dvh;
+  }
+  .cards { 
+    max-width: 100vw; 
+    overflow: visible; 
+  }
+}
+
+
