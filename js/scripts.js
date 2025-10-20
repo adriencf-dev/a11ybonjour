@@ -69,20 +69,21 @@ function sendMailFromForm(form, subject) {
     .join("\n");
 
   const href = `mailto:${MAILTO}?subject=${enc(subject)}&body=${enc(bodyText)}`;
- 
   window.location.href = href;
 
- 
   const status = form.querySelector(".form-status");
   if (status) {
-    status.textContent = `Your email app just opened. If nothing happened, please email us directly at ${MAILTO}.`;
+    status.textContent =
+      `Your email app just opened. If nothing happened, please email us directly at ${MAILTO}.`;
   }
 }
 
 // ─────────────────────────────────────────────────────────────
-// 4) Calm Form — wizard + mailto (no duplicate handlers)
+// 4) Calm Form — wizard + mailto (with initialLoad guard)
 // ─────────────────────────────────────────────────────────────
+let initialLoad = true; // ✔ On empêche le focus auto à la première ouverture
 const form = document.getElementById('calm-form');
+
 if (form) {
   const steps = Array
     .from(form.querySelectorAll('.form-step'))
@@ -92,8 +93,12 @@ if (form) {
 
   function showStep(i) {
     steps.forEach((s, idx) => { s.hidden = idx !== i; });
-    const first = steps[i].querySelector('input, textarea, button');
-    first?.focus();
+
+    // ✅ Focus uniquement après le premier chargement
+    if (!initialLoad) {
+      const first = steps[i].querySelector('input, textarea, button');
+      first?.focus();
+    }
 
     const status = form.querySelector('.form-status');
     if (status) status.textContent = `Step ${i + 1} of ${steps.length}`;
@@ -118,18 +123,14 @@ if (form) {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-
-    
     sendMailFromForm(form, 'A11yBonjour — Calm Form');
 
-    
     const status = form.querySelector('.form-status');
     if (status) {
       status.textContent = 'Message sent with calm 🌿';
       status.style.opacity = '1';
     }
 
-    
     form.reset();
     setTimeout(() => {
       current = 0;
@@ -138,8 +139,8 @@ if (form) {
     }, 3000);
   });
 
-  
   showStep(current);
+  initialLoad = false; // ✔ À partir de maintenant, la navigation focusera correctement
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -165,14 +166,11 @@ if (contact) {
 // 6) Noise of Focus — super simple synthesized noise
 // ─────────────────────────────────────────────────────────────
 let noiseCtx, noiseNode, noiseTimer;
-
 function createNoise(type = 'pink') {
   noiseCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const bufferSize = 4096; // small, low-power
-  const node = noiseCtx.createScriptProcessor(bufferSize, 1, 1);
+  const node = noiseCtx.createScriptProcessor(4096, 1, 1);
 
   let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-
   node.onaudioprocess = (e) => {
     const out = e.outputBuffer.getChannelData(0);
     for (let i = 0; i < out.length; i++) {
@@ -183,7 +181,7 @@ function createNoise(type = 'pink') {
       } else if (type === 'brown') {
         b0 += 0.02 * white;
         out[i] = b0 * 0.02;
-      } else { // pink
+      } else {
         b0 = 0.99886 * b0 + white * 0.0555179;
         b1 = 0.99332 * b1 + white * 0.0750759;
         b2 = 0.96900 * b2 + white * 0.1538520;
@@ -195,7 +193,6 @@ function createNoise(type = 'pink') {
       }
     }
   };
-
   node.connect(noiseCtx.destination);
   return node;
 }
@@ -219,7 +216,7 @@ noisePlayBtn?.addEventListener('click', () => {
   const mins = Math.max(1, parseInt(noiseMins?.value || '5', 10));
   if (noiseStatus) noiseStatus.textContent = `Focus noise for ${mins} minutes.`;
   clearTimeout(noiseTimer);
-  noiseTimer = setTimeout(() => { stopNoise(); }, mins * 60 * 1000);
+  noiseTimer = setTimeout(stopNoise, mins * 60 * 1000);
 });
 noiseStopBtn?.addEventListener('click', stopNoise);
 
@@ -230,7 +227,6 @@ const chapterLinks = $$('.chapters a');
 const sections = ['manifesto', 'lab', 'story', 'human-ai', 'contact']
   .map(id => document.getElementById(id))
   .filter(Boolean);
-
 const obs = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -295,31 +291,14 @@ if (!('showPopover' in HTMLDialogElement.prototype)) {
     pop.classList.add('popover-fallback');
     btn.addEventListener('click', () => {
       pop.classList.toggle('is-open');
-      if (pop.classList.contains('is-open')) pop.querySelector('[data-autofocus]')?.focus();
+      if (pop.classList.contains('is-open')) {
+        pop.querySelector('[data-autofocus]')?.focus();
+      }
     });
     document.addEventListener('click', (e) => {
-      if (!pop.contains(e.target) && e.target !== btn) pop.classList.remove('is-open');
+      if (!pop.contains(e.target) && e.target !== btn) {
+        pop.classList.remove('is-open');
+      }
     });
   });
 }
-
-let initialLoad = true;
-
-function showStep(i) {
-  steps.forEach((s, idx) => { s.hidden = idx !== i; });
-
-  
-  if (!initialLoad) {
-    const first = steps[i].querySelector('input, textarea, button');
-    first?.focus();
-  }
-
-  const status = form.querySelector('.form-status');
-  if (status) status.textContent = `Step ${i + 1} of ${steps.length}`;
-}
-
-...
-
-
-showStep(current);
-initialLoad = false;
