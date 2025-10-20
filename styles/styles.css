@@ -325,4 +325,46 @@ a {
     background-clip: padding-box !important;
   }
 }
+/* ===== MOBILE OVERRIDES: cards grid + card skin ===== */
+@media (hover: none) and (pointer: coarse) {
+  /* Grille: une colonne, pas de container queries (évite bugs iOS) */
+  .cards {
+    grid-template-columns: 1fr !important;
+    gap: 0.875rem !important;
+    margin-top: 1rem !important;
+    container-type: normal !important;
+  }
+
+  /* Cartes: faux-bord en inset + clip des arrondis, pas de vrai border */
+  .card {
+    border: none !important;
+    border-radius: var(--radius) !important;
+    overflow: hidden !important;
+    background: linear-gradient(180deg, #0f1318, #0b0d10) !important;
+    /* ombre + faux-bord (n'engendre pas les “rails” verticaux) */
+    box-shadow:
+      0 10px 30px rgba(0,0,0,.35),
+      0 0 0 1px #1b2129 inset !important;
+
+    /* stabilité peinture iOS */
+    transform: none !important;
+    will-change: auto !important;
+    -webkit-transform: translateZ(0);
+    background-clip: padding-box !important;
+  }
+
+  /* Les blocs internes ne redessinent pas de “bordures étirées” */
+  .card * {
+    background-clip: padding-box !important;
+    box-shadow: none !important;     /* si un inner crée le “rail” */
+  }
+
+  /* Fieldset souvent responsable des longues colonnes grises */
+  fieldset { border: 0 !important; }
+
+  /* On garde un contour discret sur les champs pour l’UI */
+  input, textarea, select {
+    border: 1px solid #28303a !important;
+  }
+}
 
