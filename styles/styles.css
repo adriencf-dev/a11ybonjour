@@ -1,5 +1,5 @@
 
-  :root {
+:root {
   --bg: #0B0D10;
   --bg-2: #14171A;
   --text: #E6E9EF;
@@ -31,66 +31,42 @@
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 
-/* =========================
-   PLAN B BLINDÉ – fond derrière tout
-   ========================= */
-html { background: var(--bg); }               /* base solide */
-body {
-  margin: 0;
-  font: 400 1rem/1.65 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-  color: var(--text);
-  background: none;
-  position: relative;        /* z-index appliqué proprement */
-  isolation: isolate;        /* empêche les fuites de pile */
-}
-/*body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
+/* ========= Fond unique (calque derrière tout) ========= */
+html {
+  background: var(--bg);
+  position: relative;
   z-index: 0;
+}
+html::before {
+  content: "";
+  position: fixed;           /* desktop par défaut */
+  inset: 0;
+  z-index: -1;               /* TOUJOURS sous le contenu */
   pointer-events: none;
   background-color: var(--bg);
   background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
   background-repeat: no-repeat;
   background-size: cover;
-  will-change: transform;
-  transform: translateZ(0);
-} */
-/* tout le contenu au-dessus du fond */
+}
+
+/* Contenu au-dessus */
 #app, header, main, footer, .section, .cards, .card, .site-footer, .container, .wrapper {
   position: relative;
   z-index: 1;
 }
 
-/* désactive tout masque global par défaut (si bug) */
+/* Désactive par défaut les masques globaux (si bug) */
 [popover]::backdrop,
 dialog::backdrop { background: transparent; }
 
-/* iOS/Android : neutraliser les contextes capricieux */
-@media (hover:none) and (pointer:coarse) {
-  .wrapper, .container {
-    transform: none !important;
-  filter: none !important;
-    will-change: auto !important;
-  }
-  .card { contain: paint; }
-}
-
-/* Widgets légitimes au-dessus */
-.chapters { z-index: 2; }
-.aohzy { z-index: 50; }
-.toaster-stack { z-index: 10000; }
-
-/* =========================
-   Style du site
-   ========================= */
+/* ========= Style du site ========= */
 
 /* A11Y helpers */
 .visually-hidden { position: absolute !important; clip: rect(1px,1px,1px,1px); clip-path: inset(50%); height: 1px; width: 1px; overflow: hidden; white-space: nowrap; }
 .visually-title { font-size: clamp(2.4rem, 6vw, 5rem); line-height: 1.1; margin: 0 0 0.5rem 0; }
 
 .skip { position: absolute; inset: 0 auto auto 0; padding: 0.25rem; }
-.skip a { position: absolute; left: -9999px; top: 0; padding: 0.5rem 0.75rem; background: --bg-2; color: var(--text); border-radius: 8px; }
+.skip a { position: absolute; left: -9999px; top: 0; padding: 0.5rem 0.75rem; background: var(--bg-2); color: var(--text); border-radius: 8px; }
 .skip a:focus { left: 0.5rem; top: 0.5rem; outline: 2px solid var(--accent); }
 
 /* Chapters dots */
@@ -144,7 +120,7 @@ dialog::backdrop { background: transparent; }
   display: flex;
   flex-direction: column;
   gap: .75rem;
-  contain: paint;
+  contain: paint; /* (désactivé sur mobile plus bas) */
 }
 .card h3 { margin-top: 0; }
 
@@ -205,7 +181,7 @@ input:focus, textarea:focus, select:focus { outline: none; box-shadow: var(--foc
 /* Focus ring */
 :focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(100,180,255,.45); border-radius: 12px; }
 
-/* Scroll-driven animations */
+/* Scroll-driven animations (OK desktop) */
 @supports (animation-timeline: scroll()) {
   @scroll-timeline hero-tl { source: auto; orientation: block; }
   [data-scroll-breathe] {
@@ -292,102 +268,38 @@ a {
 .cbx [role="option"][data-active="true"] { background: #1a1f26; border-radius: 8px; }
 .cbx [role="option"] { padding: 6px 8px; cursor: pointer; }
 
-
-/* === Desktop: réactiver un parallaxe si tu veux === */
-@media (hover: hover) and (pointer: fine) {
-  html { background-attachment: fixed; }
-}
-/* Fond sur html en pseudo-calque fixe, sous tout */
-html { position: relative; z-index: 0; background: var(--bg) !important; }
-
-html::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;             /* fond sous tout */
-  pointer-events: none;
-  background-color: var(--bg);
-  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
-  background-repeat: no-repeat;
-  background-size: cover;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-/* le contenu reste positionné/au-dessus (tu l’as déjà mis) */
-#app, header, main, footer, .section, .cards, .card, .site-footer, .container, .wrapper {
-  position: relative;
-  z-index: 1;
-}
-
-
+/* ========= Mobile overrides (iOS/Android) ========= */
 @media (hover: none) and (pointer: coarse) {
-  body { position: relative; z-index: 0 !important; }
-  body::before { z-index: -1 !important; } /* glisse le fond sous tout */
-}
-
-/* === Hotfix mobile strict (pile + largeur) === */
-@media (hover: none) and (pointer: coarse) {
-  /* Fond : sous tout, sans fixed (iOS aime mieux) */
-  body::before {
-    position: absolute !important; /* au lieu de fixed en mobile */
-    z-index: -1 !important;
-    height: 100%;
-    min-height: 100dvh;           /* couvre la hauteur visible */
-  }
-
-  /* Contenu : au-dessus, et on force un contexte propre */
-  .cards, .card, .section, header, main, footer {
-    position: relative !important;
-    z-index: 10 !important;
-    transform: translateZ(0);     /* évite certains bugs de peinture */
-  }
-
-  /* Sécurité largeur : grid qui ne déborde pas côté droit */
-  .cards {
-    overflow: visible;            /* pas de clip */
-    max-width: 100vw;
-  }
-  html, body {
-    width: 100%;
-    overflow-x: hidden;           /* si un élément force la largeur */
-  }
-}
-
-/* === Hard override mobile: calques & animations === */
-@media (hover: none) and (pointer: coarse) {
-  /* 1) Fond : pas de promotion GPU ni de fixed, et SOUS tout */
-  body::before,
+  /* 1) Fond : pas de fixed en mobile, toujours dessous */
   html::before {
-    position: absolute !important;   /* au lieu de fixed en mobile */
+    position: absolute !important;   /* au lieu de fixed */
     z-index: -1 !important;
-    transform: none !important;      /* retire translateZ(0) */
-    will-change: auto !important;
     min-height: 100dvh;
   }
 
-  /* 2) Le contenu ne crée pas de "barrières" de peinture */
-  .card {
-    contain: initial !important;     /* annule contain: paint sur mobile */
-    z-index: 1;                      /* garde le contenu au-dessus */
+  /* 2) Éléments fixed → absolute (évitons les piles bizarres) */
+  .chapters,
+  .aohzy,
+  .toaster-stack {
+    position: absolute !important;
   }
+  .chapters { top: 50% !important; right: 0 !important; }
+  .aohzy { right: 1rem !important; bottom: 1rem !important; }
+  .toaster-stack { right: 1rem !important; bottom: 1rem !important; }
 
-  /* 3) Neutralise les animations liées au scroll (contexte de peinture) */
-  [data-scroll-breathe] { 
-    animation: none !important; 
-  }
+  /* 3) Cartes : pas de contain: paint (ça évite des frontières de peinture) */
+  .card { contain: initial !important; }
 
-  /* 4) Sécurité largeur (si bande due à une fuite de largeur) */
-  html, body { 
-    width: 100%; 
-    overflow-x: hidden; 
-    height: auto; 
-    min-height: 100dvh;
-  }
-  .cards { 
-    max-width: 100vw; 
-    overflow: visible; 
-  }
+  /* 4) Animations scroll OFF (pas de contexte de peinture parasite) */
+  [data-scroll-breathe] { animation: none !important; }
+
+  /* 5) Sécurité largeur (pas de bande à gauche) */
+  html, body { width: 100%; min-height: 100dvh; overflow-x: hidden; }
+  .cards { max-width: 100vw; overflow: visible; }
 }
 
+/* ========= Desktop only: effet "fixed" si tu veux ========= */
+@media (hover: hover) and (pointer: fine) {
+  html::before { position: fixed !important; }
+}
 
