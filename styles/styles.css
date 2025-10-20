@@ -1,3 +1,54 @@
+<style id="hotfix-20251020">
+  /* 0) Reset fond/couches béton */
+  html { background: var(--bg) !important; }
+  body {
+    margin: 0;
+    background: none !important;
+    position: relative !important;
+    isolation: isolate !important;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0 !important;
+    pointer-events: none;
+    background-color: var(--bg);
+    background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* 1) Tout le contenu passe AU-DESSUS du fond */
+  #app, header, main, footer, .section, .cards, .card, .site-footer, .container, .wrapper {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  /* 2) Désactivation brutale de ce qui peut créer un masque au-dessus */
+  [popover]::backdrop,
+  dialog::backdrop {
+    background: transparent !important;
+  }
+  /* (si tu utilises les View Transitions, on les coupe le temps du fix) */
+  ::view-transition-old(root), ::view-transition-new(root) {
+    display: none !important;
+    animation-duration: .001s !important;
+  }
+
+  /* 3) Mobile : neutraliser les contextes empilants */
+  @media (hover:none) and (pointer:coarse) {
+    .wrapper, .container { transform: none !important; filter: none !important; will-change: auto !important; }
+    .card { contain: paint; }
+  }
+
+  /* 4) Widgets au-dessus (ok) */
+  .chapters { z-index: 2 !important; }
+  .aohzy { z-index: 50 !important; }
+  .toaster-stack { z-index: 10000 !important; }
+</style>
 :root {
   --bg: #0B0D10;
   --bg-2: #14171A;
