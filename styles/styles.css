@@ -299,6 +299,47 @@ a {
 }
 
 /* ========= Desktop only: effet "fixed" si tu veux ========= */
+
+/* ===== EMERGENCY MOBILE RESET (temporaire) ===== */
+@media (hover: none) and (pointer: coarse) {
+  /* 1) Désactiver tous les pseudo-fonds */
+  html::before,
+  body::before { display: none !important; }
+
+  /* 2) Tuer les overlays/backdrops/filters qui assombrissent */
+  [popover]::backdrop,
+  dialog::backdrop { display: none !important; background: transparent !important; }
+
+  [class*="overlay"],
+  [class*="backdrop"],
+  [data-overlay],
+  [data-backdrop] { display: none !important; background: transparent !important; }
+
+  /* 3) Rien ne crée de nouveau calque : pas de transform/filters/blend */
+  * {
+    transform: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  /* 4) Contenu tout devant, opacité pleine */
+  header, main, footer, .section, .cards, .card, .container, .wrapper {
+    position: relative !important;
+    z-index: 999999 !important;
+    opacity: 1 !important;
+  }
+
+  /* 5) Fixed → absolute (évite piles bizarres) */
+  .chapters, .aohzy, .toaster-stack {
+    position: absolute !important;
+  }
+
+  /* 6) Largeur/overflow safe pour éviter le décalage à gauche */
+  html, body { width: 100%; min-height: 100dvh; overflow-x: hidden !important; }
+  .cards { max-width: 100vw; overflow: visible; }
+}
+
 @media (hover: hover) and (pointer: fine) {
   html::before { position: fixed !important; }
 }
