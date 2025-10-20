@@ -1,55 +1,5 @@
-<style id="hotfix-20251020">
-  /* 0) Reset fond/couches béton */
-  html { background: var(--bg) !important; }
-  body {
-    margin: 0;
-    background: none !important;
-    position: relative !important;
-    isolation: isolate !important;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0 !important;
-    pointer-events: none;
-    background-color: var(--bg);
-    background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
-    background-repeat: no-repeat;
-    background-size: cover;
-    will-change: transform;
-    transform: translateZ(0);
-  }
 
-  /* 1) Tout le contenu passe AU-DESSUS du fond */
-  #app, header, main, footer, .section, .cards, .card, .site-footer, .container, .wrapper {
-    position: relative !important;
-    z-index: 1 !important;
-  }
-
-  /* 2) Désactivation brutale de ce qui peut créer un masque au-dessus */
-  [popover]::backdrop,
-  dialog::backdrop {
-    background: transparent !important;
-  }
-  /* (si tu utilises les View Transitions, on les coupe le temps du fix) */
-  ::view-transition-old(root), ::view-transition-new(root) {
-    display: none !important;
-    animation-duration: .001s !important;
-  }
-
-  /* 3) Mobile : neutraliser les contextes empilants */
-  @media (hover:none) and (pointer:coarse) {
-    .wrapper, .container { transform: none !important; filter: none !important; will-change: auto !important; }
-    .card { contain: paint; }
-  }
-
-  /* 4) Widgets au-dessus (ok) */
-  .chapters { z-index: 2 !important; }
-  .aohzy { z-index: 50 !important; }
-  .toaster-stack { z-index: 10000 !important; }
-</style>
-:root {
+  :root {
   --bg: #0B0D10;
   --bg-2: #14171A;
   --text: #E6E9EF;
@@ -62,7 +12,7 @@
   --maxw: 72ch;
 }
 
-:root:has([popover]:popover-open) body { overflow: hidden; }
+:root:has([popover]:popover-open) body,
 :root[data-popover-open] body { overflow: hidden; }
 
 :root[data-proof-landmarks] header,
@@ -81,30 +31,66 @@
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 
-/* === Fond : sur html (mobile-safe) === */
-html {
-  background-color: var(--bg);
-  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: scroll; /* no fixed on mobile */
-}
-
-/* === Body = contenu (pas de fond) + isolation pour la pile === */
+/* =========================
+   PLAN B BLINDÉ – fond derrière tout
+   ========================= */
+html { background: var(--bg); }               /* base solide */
 body {
   margin: 0;
   font: 400 1rem/1.65 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
   color: var(--text);
-  background: none;            /* important */
-  isolation: isolate;          /* sécurise les z-index enfants */
+  background: none;
+  position: relative;        /* z-index appliqué proprement */
+  isolation: isolate;        /* empêche les fuites de pile */
 }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--bg);
+  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  will-change: transform;
+  transform: translateZ(0);
+}
+/* tout le contenu au-dessus du fond */
+#app, header, main, footer, .section, .cards, .card, .site-footer, .container, .wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* désactive tout masque global par défaut (si bug) */
+[popover]::backdrop,
+dialog::backdrop { background: transparent; }
+
+/* iOS/Android : neutraliser les contextes capricieux */
+@media (hover:none) and (pointer:coarse) {
+  .wrapper, .container {
+    transform: none !important;
+  filter: none !important;
+    will-change: auto !important;
+  }
+  .card { contain: paint; }
+}
+
+/* Widgets légitimes au-dessus */
+.chapters { z-index: 2; }
+.aohzy { z-index: 50; }
+.toaster-stack { z-index: 10000; }
+
+/* =========================
+   Style du site
+   ========================= */
 
 /* A11Y helpers */
 .visually-hidden { position: absolute !important; clip: rect(1px,1px,1px,1px); clip-path: inset(50%); height: 1px; width: 1px; overflow: hidden; white-space: nowrap; }
 .visually-title { font-size: clamp(2.4rem, 6vw, 5rem); line-height: 1.1; margin: 0 0 0.5rem 0; }
 
 .skip { position: absolute; inset: 0 auto auto 0; padding: 0.25rem; }
-.skip a { position: absolute; left: -9999px; top: 0; padding: 0.5rem 0.75rem; background: var(--bg-2); color: var(--text); border-radius: 8px; }
+.skip a { position: absolute; left: -9999px; top: 0; padding: 0.5rem 0.75rem; background: --bg-2; color: var(--text); border-radius: 8px; }
 .skip a:focus { left: 0.5rem; top: 0.5rem; outline: 2px solid var(--accent); }
 
 /* Chapters dots */
@@ -144,53 +130,34 @@ body {
 }
 .cards > .card { display: block; }
 
-/* Card (iOS gradient/border bleed fix included) */
+/* Card */
 .card {
   position: relative;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
   border-radius: var(--radius);
-
   background: linear-gradient(180deg, #0f1318, #0b0d10);
   border: 1px solid #1b2129;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
   padding: 1rem;
-
   display: flex;
   flex-direction: column;
   gap: .75rem;
-
   contain: paint;
-  z-index: 1; /* contenu au-dessus du fond */
 }
-
 .card h3 { margin-top: 0; }
 
-/* iOS-only nudge */
 @supports (-webkit-touch-callout: none) {
-  .card { contain: paint; /* ou: transform: translateZ(0); */ }
+  .card { contain: paint; }
 }
 
-.btn-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .5rem;
-}
+.btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 
 /* Wizard form */
 .form-step { display: grid; gap: .5rem; padding-block: .25rem; }
 .form-step[hidden] { display: none !important; }
-.form-step[data-step="3"] { outline: 1px dotted #6aa0ff; }
-
-.form-status {
-  text-align: center;
-  margin-top: 0.75rem;
-  color: var(--muted);
-  font-style: italic;
-  min-height: 1.5em;
-}
+.form-status { text-align: center; margin-top: 0.75rem; color: var(--muted); font-style: italic; min-height: 1.5em; }
 
 fieldset { margin: 0; padding: .75rem; border: 1px solid #29303a; border-radius: 12px; }
 legend { padding: 0 .5rem; color: var(--muted); font-size: .95rem; }
@@ -260,7 +227,7 @@ input:focus, textarea:focus, select:focus { outline: none; box-shadow: var(--foc
   width: min(380px, 92vw);
   display: grid;
   gap: .5rem;
-  z-index: 10000; /* OK, au-dessus du contenu */
+  z-index: 10000;
   pointer-events: none;
 }
 .toaster-stack .toast-card {
@@ -273,14 +240,13 @@ input:focus, textarea:focus, select:focus { outline: none; box-shadow: var(--foc
 }
 
 /* Popover */
-[popover]::backdrop { background: rgba(0,0,0,.4); }
 [popover] { inset: auto; border: 1px solid #2a3240; background: #0f141b; border-radius: 12px; padding: .9rem; }
 @media (prefers-reduced-motion: no-preference) {
   [popover]:popover-open { animation: popIn .16s ease-out; }
   @keyframes popIn { from { opacity: 0; transform: translateY(4px) scale(.98); } to { opacity: 1; transform: none; } }
 }
 
-/* Popover fallback */
+/* Fallback popover */
 .popover-fallback {
   position: absolute; z-index: 40;
   border: 1px solid #2a3240; background: #0f141b; border-radius: 12px; padding: .9rem;
@@ -295,15 +261,11 @@ dialog::backdrop { background: rgba(0,0,0,.45); }
   dialog[open] { animation: dlgIn .18s ease-out; }
   @keyframes dlgIn { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: none; } }
 }
-dialog { box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,.02) inset; }
 dialog .stack > * + * { margin-top: .75rem; }
 .island-dialog [role="dialog"].card { max-width: min(92vw, 560px); }
 
 /* Links */
-.page-links {
-  display: flex; justify-content: center; gap: 1rem;
-  margin: 2rem 0 0; flex-wrap: wrap;
-}
+.page-links { display: flex; justify-content: center; gap: 1rem; margin: 2rem 0 0; flex-wrap: wrap; }
 a {
   display: inline-flex; align-items: center; gap: .5rem;
   padding: .55rem .9rem;
@@ -315,11 +277,8 @@ a {
 .btn-nav:focus-visible { box-shadow: var(--focus); outline: none; }
 .btn-nav.ghost { background: transparent; border-color: #2a3240; }
 
-/* View Transitions */
+/* View Transitions (sécurité minimale) */
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .28s; }
-
-/* Container queries fallback */
-@supports not (container-type: inline-size) {}
 
 /* Cards grid: large screens */
 @media (min-width: 1100px) {
@@ -332,68 +291,6 @@ a {
 .cbx [role="combobox"][aria-expanded="true"] + [role="listbox"] { display: block; }
 .cbx [role="option"][data-active="true"] { background: #1a1f26; border-radius: 8px; }
 .cbx [role="option"] { padding: 6px 8px; cursor: pointer; }
-
-/* === Mobile-specific safe-guards === */
-@media (hover: none) and (pointer: coarse) {
-  .chapters { z-index: 2; }
-  .wrapper, .container {
-    transform: none !important;
-    filter: none !important;
-    will-change: auto !important;
-  }
-  .card { z-index: 1; contain: paint; }
-}
-/* === PLAN B BLINDÉ — Fond en pseudo-calque fixe, contenu au-dessus === */
-
-/* 0) Baseline : pas de fond sur html/body pour éviter les confusions */
-html { background: var(--bg) !important; }
-body {
-  background: none !important;
-  position: relative;         /* pour que z-index s’applique proprement */
-  isolation: isolate;         /* empêche les fuites de piles */
-}
-
-/* 1) Calque de fond FIXE (derrière tout, ne capte pas les clics) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;                 /* le plus bas de la pile visible */
-  pointer-events: none;
-  background-color: var(--bg);
-  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
-  background-repeat: no-repeat;
-  background-size: cover;
-  /* petits nudges anti-glitch mobiles */
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-/* 2) Tout le CONTENU au-dessus du fond */
-#app, header, main, footer, .section, .cards, .card, .site-footer {
-  position: relative;
-  z-index: 1;
-}
-
-/* 3) Neutralisation des contextes empilants capricieux sur mobile */
-@media (hover: none) and (pointer: coarse) {
-  .wrapper, .container {
-    transform: none !important;
-    filter: none !important;
-    will-change: auto !important;
-  }
-  .card { contain: paint; } /* garde tes bords/shadows clean sans saigner */
-}
-
-/* 4) Widgets qui doivent flotter au-dessus (ok) */
-.chapters { z-index: 2; }            /* points de chapitres */
-.aohzy     { z-index: 50; }          /* ton badge */
-.toaster-stack { z-index: 10000; }   /* toasts */
-
-/* 5) Sécurité vue transitions (évite une couche par-dessus pendant l’anim) */
-::view-transition-old(root), ::view-transition-new(root) {
-  animation-duration: .001s !important;
-}
 
 
 /* === Desktop: réactiver un parallaxe si tu veux === */
