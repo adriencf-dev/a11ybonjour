@@ -104,6 +104,13 @@ body {
 }
 .card h3 { margin-top: 0; }
 
+/* iOS-only nudge (optional) */
+/* @supports détecte un truc WebKit typique pour cibler iOS sans hack user-agent */
+@supports (-webkit-touch-callout: none) {
+  .card { contain: paint; /* or: transform: translateZ(0); */ }
+}
+
+
 .btn-row {
   display: flex;
   flex-wrap: wrap;
