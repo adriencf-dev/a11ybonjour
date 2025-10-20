@@ -292,6 +292,58 @@ a {
   }
   .card { z-index: 1; contain: paint; }
 }
+/* === PLAN B BLINDÉ — Fond en pseudo-calque fixe, contenu au-dessus === */
+
+/* 0) Baseline : pas de fond sur html/body pour éviter les confusions */
+html { background: var(--bg) !important; }
+body {
+  background: none !important;
+  position: relative;         /* pour que z-index s’applique proprement */
+  isolation: isolate;         /* empêche les fuites de piles */
+}
+
+/* 1) Calque de fond FIXE (derrière tout, ne capte pas les clics) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;                 /* le plus bas de la pile visible */
+  pointer-events: none;
+  background-color: var(--bg);
+  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* petits nudges anti-glitch mobiles */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* 2) Tout le CONTENU au-dessus du fond */
+#app, header, main, footer, .section, .cards, .card, .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* 3) Neutralisation des contextes empilants capricieux sur mobile */
+@media (hover: none) and (pointer: coarse) {
+  .wrapper, .container {
+    transform: none !important;
+    filter: none !important;
+    will-change: auto !important;
+  }
+  .card { contain: paint; } /* garde tes bords/shadows clean sans saigner */
+}
+
+/* 4) Widgets qui doivent flotter au-dessus (ok) */
+.chapters { z-index: 2; }            /* points de chapitres */
+.aohzy     { z-index: 50; }          /* ton badge */
+.toaster-stack { z-index: 10000; }   /* toasts */
+
+/* 5) Sécurité vue transitions (évite une couche par-dessus pendant l’anim) */
+::view-transition-old(root), ::view-transition-new(root) {
+  animation-duration: .001s !important;
+}
+
 
 /* === Desktop: réactiver un parallaxe si tu veux === */
 @media (hover: hover) and (pointer: fine) {
