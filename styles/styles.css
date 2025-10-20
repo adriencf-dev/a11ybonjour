@@ -12,7 +12,7 @@
   --maxw: 72ch;
 }
 
-:root:has([popover]:popover-open) body,
+:root:has([popover]:popover-open) body { overflow: hidden; }
 :root[data-popover-open] body { overflow: hidden; }
 
 :root[data-proof-landmarks] header,
@@ -31,35 +31,12 @@
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 
-/* ========= Fond unique (calque derrière tout) ========= */
-html {
-  background: var(--bg);
-  position: relative;
-  z-index: 0;
+body {
+  margin: 0;
+  font: 400 1rem/1.65 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  color: var(--text);
+  background: radial-gradient(1200px 800px at 50% -10%, #11141a 0%, var(--bg) 65%);
 }
-html::before {
-  content: "";
-  position: fixed;           /* desktop par défaut */
-  inset: 0;
-  z-index: -1;               /* TOUJOURS sous le contenu */
-  pointer-events: none;
-  background-color: var(--bg);
-  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-/* Contenu au-dessus */
-#app, header, main, footer, .section, .cards, .card, .site-footer, .container, .wrapper {
-  position: relative;
-  z-index: 1;
-}
-
-/* Désactive par défaut les masques globaux (si bug) */
-[popover]::backdrop,
-dialog::backdrop { background: transparent; }
-
-/* ========= Style du site ========= */
 
 /* A11Y helpers */
 .visually-hidden { position: absolute !important; clip: rect(1px,1px,1px,1px); clip-path: inset(50%); height: 1px; width: 1px; overflow: hidden; white-space: nowrap; }
@@ -96,44 +73,42 @@ dialog::backdrop { background: transparent; }
 .lede { font-size: 1.125rem; color: var(--muted); }
 
 /* Cards grid */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-  container-type: inline-size;
-  align-items: stretch;
-}
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.cards { container-type: inline-size; }
 .cards > .card { display: block; }
 
-/* Card */
 .card {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  border-radius: var(--radius);
   background: linear-gradient(180deg, #0f1318, #0b0d10);
   border: 1px solid #1b2129;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
   padding: 1rem;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
   display: flex;
   flex-direction: column;
   gap: .75rem;
-  contain: paint; /* (désactivé sur mobile plus bas) */
 }
 .card h3 { margin-top: 0; }
 
-@supports (-webkit-touch-callout: none) {
-  .card { contain: paint; }
+.card p:has(.btn),
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
 }
-
-.btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 
 /* Wizard form */
 .form-step { display: grid; gap: .5rem; padding-block: .25rem; }
 .form-step[hidden] { display: none !important; }
-.form-status { text-align: center; margin-top: 0.75rem; color: var(--muted); font-style: italic; min-height: 1.5em; }
+.form-step[data-step="3"] { outline: 1px dotted #6aa0ff; }
+
+.form-status {
+  text-align: center;
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+  min-height: 1.5em;
+}
 
 fieldset { margin: 0; padding: .75rem; border: 1px solid #29303a; border-radius: 12px; }
 legend { padding: 0 .5rem; color: var(--muted); font-size: .95rem; }
@@ -148,7 +123,7 @@ legend { padding: 0 .5rem; color: var(--muted); font-size: .95rem; }
 
 /* Text blocks */
 .demo-text.calm { letter-spacing: 0.01em; line-height: 1.85; }
-.breath blockquote { font-style: italic; color: var(--muted); border-left: 3px solid #7DA7D9; padding-left: .75rem; }
+.breath blockquote { font-style: italic; color: var(--muted); border-left: 3px solid var(--accent); padding-left: .75rem; }
 .prose { color: var(--text); }
 .manifest-list { display: grid; gap: .5rem; padding-left: 1rem; }
 .bridge { margin-top: var(--space-lg); color: var(--muted); font-size: 1.05rem; }
@@ -181,7 +156,7 @@ input:focus, textarea:focus, select:focus { outline: none; box-shadow: var(--foc
 /* Focus ring */
 :focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(100,180,255,.45); border-radius: 12px; }
 
-/* Scroll-driven animations (OK desktop) */
+/* Scroll-driven animations */
 @supports (animation-timeline: scroll()) {
   @scroll-timeline hero-tl { source: auto; orientation: block; }
   [data-scroll-breathe] {
@@ -216,13 +191,14 @@ input:focus, textarea:focus, select:focus { outline: none; box-shadow: var(--foc
 }
 
 /* Popover */
+[popover]::backdrop { background: rgba(0,0,0,.4); }
 [popover] { inset: auto; border: 1px solid #2a3240; background: #0f141b; border-radius: 12px; padding: .9rem; }
 @media (prefers-reduced-motion: no-preference) {
   [popover]:popover-open { animation: popIn .16s ease-out; }
   @keyframes popIn { from { opacity: 0; transform: translateY(4px) scale(.98); } to { opacity: 1; transform: none; } }
 }
 
-/* Fallback popover */
+/* Popover fallback */
 .popover-fallback {
   position: absolute; z-index: 40;
   border: 1px solid #2a3240; background: #0f141b; border-radius: 12px; padding: .9rem;
@@ -237,11 +213,15 @@ dialog::backdrop { background: rgba(0,0,0,.45); }
   dialog[open] { animation: dlgIn .18s ease-out; }
   @keyframes dlgIn { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: none; } }
 }
+dialog { box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,.02) inset; }
 dialog .stack > * + * { margin-top: .75rem; }
 .island-dialog [role="dialog"].card { max-width: min(92vw, 560px); }
 
 /* Links */
-.page-links { display: flex; justify-content: center; gap: 1rem; margin: 2rem 0 0; flex-wrap: wrap; }
+.page-links {
+  display: flex; justify-content: center; gap: 1rem;
+  margin: 2rem 0 0; flex-wrap: wrap;
+}
 a {
   display: inline-flex; align-items: center; gap: .5rem;
   padding: .55rem .9rem;
@@ -253,8 +233,11 @@ a {
 .btn-nav:focus-visible { box-shadow: var(--focus); outline: none; }
 .btn-nav.ghost { background: transparent; border-color: #2a3240; }
 
-/* View Transitions (sécurité minimale) */
+/* View Transitions */
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .28s; }
+
+/* Container queries fallback */
+@supports not (container-type: inline-size) {}
 
 /* Cards grid: large screens */
 @media (min-width: 1100px) {
@@ -267,80 +250,40 @@ a {
 .cbx [role="combobox"][aria-expanded="true"] + [role="listbox"] { display: block; }
 .cbx [role="option"][data-active="true"] { background: #1a1f26; border-radius: 8px; }
 .cbx [role="option"] { padding: 6px 8px; cursor: pointer; }
-
-/* ========= Mobile overrides (iOS/Android) ========= */
+/* ===== MOBILE FIX (iOS + Android, toutes apps) ===== */
 @media (hover: none) and (pointer: coarse) {
-  /* 1) Fond : pas de fixed en mobile, toujours dessous */
-  html::before {
-    position: absolute !important;   /* au lieu de fixed */
-    z-index: -1 !important;
+  /* Fond : pas d’effet 'fixed', fond scrollable et stable */
+  html, body {
+    background-attachment: scroll !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    width: 100%;
     min-height: 100dvh;
+    overflow-x: hidden !important;
   }
 
-  /* 2) Éléments fixed → absolute (évitons les piles bizarres) */
-  .chapters,
-  .aohzy,
-  .toaster-stack {
-    position: absolute !important;
+  /* View Transitions : on coupe les calques qui peuvent masquer le contenu */
+  ::view-transition-old(root), 
+  ::view-transition-new(root) {
+    display: none !important;
+    animation-duration: .001s !important;
   }
-  .chapters { top: 50% !important; right: 0 !important; }
-  .aohzy { right: 1rem !important; bottom: 1rem !important; }
-  .toaster-stack { right: 1rem !important; bottom: 1rem !important; }
 
-  /* 3) Cartes : pas de contain: paint (ça évite des frontières de peinture) */
-  .card { contain: initial !important; }
-
-  /* 4) Animations scroll OFF (pas de contexte de peinture parasite) */
-  [data-scroll-breathe] { animation: none !important; }
-
-  /* 5) Sécurité largeur (pas de bande à gauche) */
-  html, body { width: 100%; min-height: 100dvh; overflow-x: hidden; }
-  .cards { max-width: 100vw; overflow: visible; }
-}
-
-/* ========= Desktop only: effet "fixed" si tu veux ========= */
-
-/* ===== EMERGENCY MOBILE RESET (temporaire) ===== */
-@media (hover: none) and (pointer: coarse) {
-  /* 1) Désactiver tous les pseudo-fonds */
-  html::before,
-  body::before { display: none !important; }
-
-  /* 2) Tuer les overlays/backdrops/filters qui assombrissent */
-  [popover]::backdrop,
-  dialog::backdrop { display: none !important; background: transparent !important; }
-
-  [class*="overlay"],
-  [class*="backdrop"],
-  [data-overlay],
-  [data-backdrop] { display: none !important; background: transparent !important; }
-
-  /* 3) Rien ne crée de nouveau calque : pas de transform/filters/blend */
-  * {
+  /* Le contenu passe au-dessus, sans créer de nouveaux calques */
+  header, main, footer, .section, .cards, .card, .container, .wrapper, .site-footer {
+    position: relative !important;
+    z-index: 1 !important;
     transform: none !important;
     filter: none !important;
-    backdrop-filter: none !important;
-    mix-blend-mode: normal !important;
+    will-change: auto !important;
   }
 
-  /* 4) Contenu tout devant, opacité pleine */
-  header, main, footer, .section, .cards, .card, .container, .wrapper {
-    position: relative !important;
-    z-index: 999999 !important;
-    opacity: 1 !important;
-  }
+  /* Les cartes ne créent pas de frontière de peinture (iOS glitch) */
+  .card { contain: initial !important; }
 
-  /* 5) Fixed → absolute (évite piles bizarres) */
-  .chapters, .aohzy, .toaster-stack {
-    position: absolute !important;
-  }
+  /* Les éléments fixed deviennent absolute (pile plus saine en mobile) */
+  .chapters, .aohzy, .toaster-stack { position: absolute !important; }
 
-  /* 6) Largeur/overflow safe pour éviter le décalage à gauche */
-  html, body { width: 100%; min-height: 100dvh; overflow-x: hidden !important; }
-  .cards { max-width: 100vw; overflow: visible; }
+  /* Backdrop/popover : aucun voile global en mobile */
+  [popover]::backdrop, dialog::backdrop { background: transparent !important; }
 }
-
-@media (hover: hover) and (pointer: fine) {
-  html::before { position: fixed !important; }
-}
-
