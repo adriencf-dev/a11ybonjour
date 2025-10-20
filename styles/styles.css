@@ -88,9 +88,7 @@ body {
   position: relative;
   width: 100%;
   max-width: 100%;
-  overflow: hidden;                 
-  isolation: isolate;               
-  background-clip: padding-box;     
+  overflow: hidden;
   border-radius: var(--radius);
 
   background: linear-gradient(180deg, #0f1318, #0b0d10);
@@ -101,7 +99,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: .75rem;
+
+  contain: paint;        
+  z-index: 0;             
 }
+
 .card h3 { margin-top: 0; }
 
 /* iOS-only nudge (optional) */
