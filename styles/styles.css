@@ -43,7 +43,7 @@ body {
   position: relative;        /* z-index appliqué proprement */
   isolation: isolate;        /* empêche les fuites de pile */
 }
-body::before {
+/*body::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -55,7 +55,7 @@ body::before {
   background-size: cover;
   will-change: transform;
   transform: translateZ(0);
-}
+} */
 /* tout le contenu au-dessus du fond */
 #app, header, main, footer, .section, .cards, .card, .site-footer, .container, .wrapper {
   position: relative;
@@ -297,6 +297,29 @@ a {
 @media (hover: hover) and (pointer: fine) {
   html { background-attachment: fixed; }
 }
+/* Fond sur html en pseudo-calque fixe, sous tout */
+html { position: relative; z-index: 0; background: var(--bg) !important; }
+
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;             /* fond sous tout */
+  pointer-events: none;
+  background-color: var(--bg);
+  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* le contenu reste positionné/au-dessus (tu l’as déjà mis) */
+#app, header, main, footer, .section, .cards, .card, .site-footer, .container, .wrapper {
+  position: relative;
+  z-index: 1;
+}
+
 
 @media (hover: none) and (pointer: coarse) {
   body { position: relative; z-index: 0 !important; }
