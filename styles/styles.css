@@ -71,24 +71,39 @@ body {
 .hero .subtitle { color: var(--muted); margin: 0.25rem 0; }
 .lede { font-size: 1.125rem; color: var(--muted); }
 
+
 /* Cards grid */
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
-.cards { container-type: inline-size; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  container-type: inline-size;
+  align-items: stretch;
+}
 .cards > .card { display: block; }
 
+/* Card (iOS gradient/border bleed fix included) */
 .card {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;                 
+  isolation: isolate;               
+  background-clip: padding-box;     
+  border-radius: var(--radius);
+
   background: linear-gradient(180deg, #0f1318, #0b0d10);
   border: 1px solid #1b2129;
-  padding: 1rem;
-  border-radius: var(--radius);
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  padding: 1rem;
+
   display: flex;
   flex-direction: column;
   gap: .75rem;
 }
 .card h3 { margin-top: 0; }
 
-.card p:has(.btn),
 .btn-row {
   display: flex;
   flex-wrap: wrap;
