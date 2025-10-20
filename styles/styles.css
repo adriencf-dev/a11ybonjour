@@ -288,14 +288,13 @@ a {
   [popover]::backdrop, dialog::backdrop { background: transparent !important; }
 }
 
-/* === TEST: border/ombre des cartes === */
+
+/* ===== TEST 2 : neutralisation des bordures internes sur mobile ===== */
 @media (hover: none) and (pointer: coarse) {
-  /* 1) On neutralise border + ombre pour voir si le "voile" disparaît */
-  .card {
-    border: 0 !important;
+  .card * {
+    border: none !important;
     box-shadow: none !important;
-    background: transparent !important;  /* on garde le contenu visible */
-    outline: 2px solid rgba(255,0,0,.4) !important; /* repère visuel */
+    outline: none !important;
+    background-clip: border-box !important;
   }
 }
-
