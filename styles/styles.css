@@ -298,3 +298,31 @@ a {
     background-clip: border-box !important;
   }
 }
+
+/* ==== MOBILE CARD PAINT FIX (iOS/Android) ==== */
+@media (hover: none) and (pointer: coarse) {
+  /* 1) Pas de container queries sur la grille (bug de peinture iOS) */
+  .cards { container-type: normal !important; }
+
+  /* 2) Cartes : remplacer le border par un faux-bord en inset (safe) */
+  .card {
+    border: none !important;
+    box-shadow:
+      0 10px 30px rgba(0,0,0,.35),      /* ombre */
+      0 0 0 1px #1b2129 inset !important; /* faux-bord */
+    overflow: hidden !important;         /* clip des arrondis */
+    background-clip: padding-box !important;
+    -webkit-transform: translateZ(0);    /* stabilise la peinture iOS */
+    will-change: transform;
+  }
+
+  /* 3) Fieldset : retire le vrai border (c'est souvent lui qui “étire”) */
+  fieldset { border: 0 !important; }
+
+  /* 4) Garde les contrôles lisibles (leur propre bordure reste OK) */
+  input, textarea, select {
+    border: 1px solid #28303a !important;
+    background-clip: padding-box !important;
+  }
+}
+
