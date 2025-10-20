@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>A11yBonjour /lab — Islands & Modern Web APIs</title>
+    <meta name="description" content="Calm site, tech proofs. React as islands + modern web APIs with graceful fallbacks." />
+    <link rel="preload" href="styles/styles.css" as="style" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <script>document.documentElement.classList.remove('no-js');</script>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <script type="module" src="js/scripts.js"></script>
+    <script type="module" src="js/aohzy.js"></script>
+    <script type="module" src="js/tts.js"></script>
+    <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" defer></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" defer></script>
+    <script type="module" src="js/lab.js"></script>
+    <script type="module" src="lab/mount.js"></script>
+    
+
+
+  </head>
+  <body>
+    <nav class="skip" aria-label="Skip links">
+      <a href="#main">Skip to content</a>
+      <a href="#tech">Skip to tech sheet</a>
+    </nav>
+
+    <header class="section" role="banner">
+      <h1 class="visually-title">/lab — Calm site, strong proofs</h1>
+      <p class="lede">This isn’t a SPA. It’s a calm site with progressive enhancement. React runs as islands where it adds real value.</p>
+      <p><a class="btn" href="/" data-vt="">← Back to home</a></p>
+    </header>
+
+    <main id="main">
+      <!-- React Islands (each with an accessible HTML fallback) -->
+      <section id="islands" class="section" aria-labelledby="islands-title">
+        <h2 id="islands-title">React islands (with HTML fallbacks)</h2>
+        <div class="cards" role="list">
+          <article class="card" role="listitem">
+            <h3>Accessible Dialog</h3>
+            <div data-react-island="A11yDialog">
+              <!-- Fallback via Popover API -->
+              <button class="btn" popovertarget="demo-dialog" aria-haspopup="dialog" aria-controls="demo-dialog">Open dialog</button>
+              <div id="demo-dialog" popover role="dialog" aria-modal="true" aria-labelledby="demo-title">
+                <h4 id="demo-title">Hello</h4>
+                <p>Native fallback using the Popover API. The React island will hydrate here when available.</p>
+                <button class="btn ghost" popovertarget="demo-dialog" popovertargetaction="hide">Close</button>
+            </div>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <h3>Combobox / Command</h3>
+            <div data-react-island="A11yCombo">
+              <!-- Fallback: labeled input + datalist -->
+              <label for="combo-fallback">Find component</label>
+              <input id="combo-fallback" list="components" autocomplete="off" />
+              <datalist id="components">
+                <option>Dialog</option><option>Combobox</option><option>Toaster</option>
+              </datalist>
+              <p class="visually-hidden" aria-live="polite">Fallback combobox using datalist.</p>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <h3>Toaster (polite)</h3>
+            <div data-react-island="A11yToaster">
+              <!-- Fallback: aria-live polite region -->
+              <button class="btn" data-fallback-toast>Show message</button>
+              <p class="visually-hidden" aria-live="polite" id="toast-region">Ready.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Modern Web APIs (stable, with fallbacks) -->
+      <section id="apis" class="section" aria-labelledby="apis-title">
+        <h2 id="apis-title">Modern Web APIs (with graceful fallbacks)</h2>
+        <ul class="manifest-list" role="list">
+          <li><strong>View Transitions</strong> — fluid page/section changes without losing focus. <em>Fallback:</em> default navigation.</li>
+          <li><strong>Popover</strong> (+ <code>:has()</code>, <em>inert-ready</em>) — native menus/dialogs, simple focus. <em>Fallback:</em> CSS/JS modal.</li>
+          <li><strong>Container Queries</strong> — components adapt in place. <em>Fallback:</em> global media queries.</li>
+          <li><strong>Scroll-Driven Animations</strong> — calm micro-motion tied to reading. <em>Fallback:</em> animations off by preference.</li>
+          <li><strong>Web Audio</strong> — local pink/white/brown noise with timer. <em>Fallback:</em> disabled respectfully.</li>
+          <li><strong>Web Speech</strong> — local TTS narrator presets. <em>Fallback:</em> disabled respectfully.</li>
+        </ul>
+      </section>
+
+      <!-- Proof Mode (built-in a11y tools) -->
+      <section id="proof" class="section" aria-labelledby="proof-title">
+        <h2 id="proof-title">Proof mode (built-in a11y helpers)</h2>
+        <p class="section-lead">Toggle tab order map, landmarks outline, and live contrast badges.</p>
+        <p>
+          <button class="btn" data-proof="tabmap">Tab order map</button>
+          <button class="btn" data-proof="landmarks">Landmarks outline</button>
+          <button class="btn" data-proof="contrast">Contrast badge</button>
+        </p>
+        <p class="visually-hidden" aria-live="polite" id="proof-status">Proof mode ready.</p>
+      </section>
+
+      <!-- Tech Sheet for recruiters -->
+      <section id="tech" class="section" aria-labelledby="tech-title">
+        <h2 id="tech-title">Tech sheet (calm architecture)</h2>
+        <div class="prose">
+          <p><strong>Principles.</strong> Local-first, progressive enhancement, sobriety. Home = semantic HTML + Vanilla JS. /lab = React islands.</p>
+          <p><strong>Stack.</strong> HTML, CSS, Vanilla JS, React islands; View Transitions, Popover, Container Queries, Scroll Animations, Web Audio, Web Speech.</p>
+          <p><strong>Perf budgets.</strong> HTML &lt; 30 KB, CSS &lt; 20 KB, JS (home) &lt; 50 KB. No third-party tracking. Fonts system.</p>
+          <p><strong>A11Y.</strong> Keyboard first, visible focus, RMW respected, polite ARIA. Contrast AA/AAA by default in dark-first.</p>
+          <p><strong>Fallbacks.</strong> Every API degrades gracefully to a native or simple pattern.</p>
+        </div>
+        <p><a class="btn" href="/?recruiter">Open recruiter overlay</a></p>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <p>Built as an annex: calm home, technical lab. <a class="btn-nav" href="/" data-vt="">Return home</a></p>
+    </footer>
+
+  
+  </body>
+</html>

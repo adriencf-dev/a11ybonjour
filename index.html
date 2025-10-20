@@ -1,221 +1,287 @@
+
 <!doctype html>
-<html lang="en" data-theme="light">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>a11ybonjour — Mini Landing</title>
-  <meta name="description" content="Mini landing, accessible and mobile-first. Semantic HTML, keyboard navigation, micro-interactions, responsive, VoiceOver tests." />
-  <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#0b0b0b">
-  <link rel="stylesheet" href="css/style.css?v=1007-4" media="all">
-  <link rel="icon" href="assets/icons/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
-  <link rel="shortcut icon" href="assets/icons/favicon.ico">
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="js/react-widgets.js" defer></script>
-  <script src="js/i18n.js" defer></script>
-  <script src="js/script.js" defer></script>
-  <script src="js/weather.js" defer></script>
-  <script src="js/todo.js" defer></script>
-  <script src="js/audit.js" defer></script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to main content</a>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>A11yBonjour — Calm, emotional, human accessibility for the future web</title>
+    <meta name="description" content="A11yBonjour — Calm, emotional, human accessibility for the future web." />
 
-  <div class="container">
-    <header class="site-header" role="banner">
-      <div class="header-row">
-        <a href="#main" class="brand-link" aria-label="Go to main content">
-          <img src="assets/img/logo-light.png" alt="" class="logo light-only" />
-          <img src="assets/img/logo-dark.png" alt="" class="logo dark-only" />
-          <span class="brand-text">A11yBonjour</span>
-        </a>
+    <!-- Open Graph / SEO minimal -->
+    <meta property="og:title" content="A11yBonjour — The Future of Accessible Experience" />
+    <meta property="og:description" content="Calm, emotional, human accessibility." />
+    <meta property="og:type" content="website" />
+    <link rel="preload" href="styles/styles.css" as="style" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <script type="module" src="js/scripts.js" defer></script>
+    <script type="module" src="js/aohzy.js" defer></script>
+    <script type="module" src="js/tts.js" defer></script>
+    <script type="module" src="lab/mount.js" defer></script>
+    <script>document.documentElement.classList.remove('no-js');</script>
+  </head>
+  <body>
+    <!-- Skip Links -->
+    <nav class="skip" aria-label="Skip links">
+      <a href="#main">Skip to content</a>
+      <a href="#contact">Skip to contact</a>
+    </nav>
 
-        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">☰</button>
+    <!-- Mini accessible dots nav (appears on focus) -->
+    <nav class="chapters" aria-label="Chapters">
+      <ul role="list">
+        <li><a href="#manifesto" aria-current="page">Manifesto</a></li>
+        <li><a href="#lab">Experience</a></li>
+        <li><a href="#story">Story</a></li>
+        <li><a href="#human-ai">Manifesto II</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
 
-        <nav id="site-nav" class="primary-nav" aria-label="Primary navigation">
-          <a href="#features" data-i18n="nav.features">Features</a>
-          <a href="#demos" data-i18n="nav.demos">Demos</a>
-          <a href="#about" data-i18n="nav.about">About</a>
-          <a href="#contact-form" data-i18n="nav.contact">Contact</a>
-        </nav>
+    <main id="main">
+      <!-- Hero / Living Manifesto -->
+      <section id="manifesto" class="section hero" aria-labelledby="hero-title" tabindex="-1">
+        <header>
+          <h1 id="hero-title" class="visually-title">
+            <span aria-live="polite" aria-atomic="true" id="hero-rotor">I design calm.</span>
+          </h1>
+          <p class="subtitle">Accessibility you can <em>feel</em>.</p>
+          <p class="subtitle small">Human + AI for <strong>clarity</strong>.</p>
+        </header>
+        <p class="lede">The web is not just visible — it’s sensed.</p>
+        <p><button class="btn primary" data-action="enter">Enter the experience</button></p>
+      </section>
 
-        <div class="controls" role="group" aria-label="Display and language">
-          <button id="themeToggle" aria-pressed="false" aria-label="Enable dark theme" title="Dark theme" class="btn-icon">
-            <span aria-hidden="true" id="themeIcon">☀️</span>
-            <span class="sr-only" id="themeLabel">Enable dark theme</span>
-          </button>
+      <!-- Experience / Lab -->
+      <section id="lab" class="section lab" aria-labelledby="lab-title">
+        <h2 id="lab-title">Experience / Lab</h2>
+        <p class="section-lead">Small, living demos — empathy you can try.</p>
 
-          <div class="lang-switch" role="group" aria-label="Change language">
-            <button id="langEn" class="btn-icon" aria-pressed="true" aria-label="Switch language to English" title="English">🇬🇧</button>
-            <button id="langFr" class="btn-icon" aria-pressed="false" aria-label="Switch language to French" title="Français">🇫🇷</button>
+        <div class="cards force-3" role="list">
+          <!-- Empathy Mode demo card -->
+          <article class="card" role="listitem">
+            <h3>Empathy Mode</h3>
+            <p>Increase spacing, reduce density, keep AAA contrast. For overloaded minds.</p>
+            <p>
+              <button class="btn" data-action="calm-view" aria-pressed="false" aria-controls="calm-demo">Try Calm View</button>
+              <button class="btn ghost" data-action="reset-view">Back to normal</button>
+            </p>
+            <div id="calm-demo" class="demo-text" aria-live="polite">
+              <p>Reading shouldn’t be a race. Calm is a design choice.</p>
+              <p>When everything slows, meaning arrives.</p>
+            </div>
+          </article>
+
+          <!-- Narrator demo card -->
+<article class="card" role="listitem">
+  <h3>Narrator (local)</h3>
+  <div id="narrator">
+    <p>Local-only voice. Nothing leaves your device.</p>
+
+    <!-- CONTRÔLES AJOUTÉS (neutres pour ton CSS) -->
+    <div class="row">
+      <label>Voice type
+        <select id="nar-voice-type">
+          <option>Masculine</option>
+          <option>Feminine</option>
+          <option>Neutral</option>
+        </select>
+      </label>
+      <label>Tone
+        <select id="nar-tone">
+          <option>Warm</option>
+          <option>Neutral</option>
+          <option>Night</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- TON BLOC EXISTANT CONSERVÉ TEL QUEL -->
+    <fieldset aria-label="Voice presets">
+      <legend class="visually-hidden">Presets</legend>
+      <label><input type="radio" name="voice" value="warm" checked /> Warm</label>
+      <label><input type="radio" name="voice" value="neutral" /> Neutral</label>
+      <label><input type="radio" name="voice" value="night" /> Night</label>
+    </fieldset>
+
+    <p>
+      <!-- on garde tes attributs, on AJOUTE juste data-narrator-play pour brancher tts.js -->
+      <button class="btn" data-action="tts-play" data-narrator-play>Listen</button>
+      <button class="btn ghost" data-action="tts-stop">Stop</button>
+    </p>
+  </div>
+</article>
+
+<!-- Combobox / Command demo card -->
+<article class="card" role="listitem">
+  <h3>Combobox / Command</h3>
+  <p>Arrow keys to navigate, <kbd>Enter</kbd> to select.</p>
+
+  <div class="cbx" id="demo-combo">
+    <label id="demo-combo-label" class="visually-hidden">Choose</label>
+    <input
+  type="text"
+  role="combobox"
+  aria-expanded="false"
+  aria-controls="demo-combo-list"
+  aria-autocomplete="none"
+  aria-labelledby="demo-combo-label"
+  placeholder="Choose…"
+  readonly
+/>
+
+
+    <ul id="demo-combo-list" role="listbox">
+      <li role="option" tabindex="-1">Alpha</li>
+      <li role="option" tabindex="-1">Bravo</li>
+      <li role="option" tabindex="-1">Charlie</li>
+    </ul>
+
+    <p id="demo-combo-hint" class="visually-hidden" aria-live="polite">
+      Type to see options, use arrow keys, press Enter to choose.
+    </p>
+  </div>
+</article>
+
+
+
+          <!-- ==== HTML (référence) ==== -->
+<article class="card" role="listitem">
+  <h3>Calm Form</h3>
+  <p>One intention per step. Gentle guidance, no noise.</p>
+
+  <form id="calm-form" novalidate>
+    <div class="form-step" data-step="1">
+      <label for="cf-name">Your name</label>
+      <input id="cf-name" name="name" autocomplete="name" required />
+      <div class="btn-row">
+        <button class="btn next" type="button">Next</button>
+      </div>
+    </div>
+
+    <div class="form-step" data-step="2" hidden>
+      <label for="cf-email">Email</label>
+      <input id="cf-email" name="email" type="email" autocomplete="email" required />
+      <div class="hint">We’ll only use this to reply. No newsletter. No tracking.</div>
+      <div class="btn-row">
+        <button class="btn prev" type="button">Back</button>
+        <button class="btn next" type="button">Next</button>
+      </div>
+    </div>
+
+    <div class="form-step" data-step="3" hidden>
+      <label for="cf-msg">Your message</label>
+      <textarea id="cf-msg" name="message" rows="4" required></textarea>
+      <div class="btn-row">
+        <button class="btn prev" type="button">Back</button>
+        <button class="btn primary" type="submit">Send</button>
+      </div>
+    </div>
+
+    <p class="form-status" role="status" aria-live="polite"></p>
+  </form>
+</article>
+
+          <!-- Noise of Focus demo card -->
+          <article class="card" role="listitem">
+            <h3>Noise of Focus</h3>
+            <p>Optional pink/white/brown noise with a gentle timer.</p>
+            <label for="noise-type">Type</label>
+            <select id="noise-type">
+              <option value="pink">Pink</option>
+              <option value="white">White</option>
+              <option value="brown">Brown</option>
+            </select>
+            <label for="noise-mins">Minutes</label>
+            <input id="noise-mins" type="number" min="1" max="60" value="5" inputmode="numeric" />
+            <p>
+              <button class="btn" data-action="noise-play">Start</button>
+              <button class="btn ghost" data-action="noise-stop">Stop</button>
+            </p>
+            <p class="visually-hidden" aria-live="polite" id="noise-status"></p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Breath / phrase-âme between Lab and Story -->
+      <section class="section breath" aria-label="Breath line">
+        <blockquote>
+          <p>Accessibility begins where assumptions end.</p>
+        </blockquote>
+      </section>
+
+      <!-- Story -->
+      <section id="story" class="section story" aria-labelledby="story-title">
+        <h2 id="story-title">From Invisible to Unbreakable</h2>
+        <p class="prose">For years, I hid behind code that wasn’t mine. Until I realized accessibility is not compliance — it’s empathy turned into pixels. From invisible to unbreakable. From noise to clarity.</p>
+      </section>
+
+      <!-- Manifesto II (Human + AI Web) -->
+      <section id="human-ai" class="section manifesto" aria-labelledby="manifesto2-title">
+        <h2 id="manifesto2-title">The Human + AI Web</h2>
+        <ul class="manifest-list" role="list">
+          <li>A11yBonjour isn’t a portfolio — it’s a feeling built with code.</li>
+          <li>We believe empathy can be engineered.</li>
+          <li>Calm is design.</li>
+          <li>AI, when local and kind, doesn’t replace us — it amplifies our humanity.</li>
+        </ul>
+        <p class="bridge" aria-live="polite">Beyond answers, AI can hold silence, care, and the warmth of listening.</p>
+        <div id="easter-one" aria-live="polite" aria-label="Hidden message" tabindex="0" data-hidden-reveal>
+          <!-- Revealed by AOHZY timing or subtle click/idle -->
+          <span class="dot" aria-hidden="true"></span>
+          <span class="whisper" hidden>App +one — closer than you feel.</span>
+        </div>
+      </section>
+
+      <!-- Outro / Contact -->
+      <section id="contact" class="section contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">Let’s talk</h2>
+        <p>If you believe empathy and design belong together…</p>
+        <p class="accent">Let’s build something quietly powerful.</p>
+        <form id="contact-form" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" required autocomplete="name" />
           </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+          </div>
+          <button class="btn primary" type="submit">Send</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
 
-          <!-- Pink noise accessible -->
-          <button id="pinkNoiseBtn" class="btn-icon pink-noise-btn" aria-label="Play pink noise for relaxation" title="Pink noise"></button>
-          <audio id="pinkNoise" src="assets/audio/pink-noise.mp3" preload="auto" loop></audio>
+    <footer class="site-footer" role="contentinfo">
+      <p>AOHZY runs locally. No cloud, no tracking. You opt in, you opt out — always.</p>
+      <p>Designed and built in Brittany & Paris with care by <strong>Adrien Calvez-Foubert</strong>.</p>
+      <p><a class="btn-nav" href="/lab.html" data-vt>/lab — tech demos</a></p>
+    </footer>
+    
+
+    <!-- AOHZY companion (visually minimal, ARIA rich) -->
+    <aside id="aohzy" class="aohzy" aria-live="polite" aria-label="AOHZY companion" hidden>
+      <div class="aohzy-inner" role="dialog" aria-modal="false" aria-labelledby="aohzy-title">
+        <p id="aohzy-title" class="visually-hidden">AOHZY</p>
+        <p id="aohzy-msg">Reading mode is one tap away.</p>
+        <div class="aohzy-actions">
+          <button class="btn sm" data-a="accept">OK</button>
+          <button class="btn ghost sm" data-a="dismiss">Dismiss</button>
         </div>
       </div>
-    </header>
-
-    <main id="main" tabindex="-1">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="copy">
-          <h1 id="hero-title">A11yBonjour</h1>
-
-          <h2 class="hero-subtitle" data-i18n="hero.subtitle">
-            A gentle navigation for everyone
-          </h2>
-
-          <h3 class="hero-explain" data-i18n="hero.explain">
-            A11Y → A-11 letters-Y → Accessibility
-          </h3>
-
-          <p data-i18n="hero.bonjour">
-            "Bonjour", a French touch of accessibility for all
-          </p>
-
-          <p class="baseline" data-i18n="hero.tagline">
-            Design for the forgotten ones.
-          </p>
-        </div>
-
-        <div class="illus" aria-hidden="true">
-          <img src="assets/img/leo.png" alt="" width="640" height="640" loading="eager" decoding="async">
-        </div>
-      </section>
-
-      <!-- Demos grid -->
-      <section id="demos" aria-labelledby="demos-title">
-        <h2 id="demos-title" data-i18n="demos.title">Accessible demos</h2>
-        <p class="lead" data-i18n="demos.lead">Three small accessible examples to show HTML/ARIA, mobile-first CSS (light/dark), and JS with local storage.</p>
-
-        <div class="cards" role="list">
-          <article class="card" role="listitem">
-            <h3 data-i18n="demos.weather.title">Mini weather app</h3>
-            <p data-i18n="demos.weather.desc">Keyboard and screen reader navigation; small local storage and respect of reduced-motion.</p>
-            <div class="actions">
-              <a href="#weather" class="cta" data-i18n="demos.cta.view">View demo</a>
-            </div>
-          </article>
-
-          <article class="card" role="listitem">
-            <h3 data-i18n="demos.todo.title">To-do list</h3>
-            <p data-i18n="demos.todo.desc">Semantic list roles, labels, focus; tasks persisted (localStorage).</p>
-            <div class="actions">
-              <a href="#todo" class="cta" data-i18n="demos.cta.view">View demo</a>
-            </div>
-          </article>
-
-          <article class="card" role="listitem">
-            <h3 data-i18n="demos.audit.title">Site audit (anonymized)</h3>
-            <p data-i18n="demos.audit.desc">Mini a11y review: regions, headings, contrast, navigation, form labels.</p>
-            <div class="actions">
-              <a href="#audit" class="cta" data-i18n="demos.cta.read">Read notes</a>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="weather" class="demo-block" aria-labelledby="weather-title">
-        <h2 id="weather-title" data-i18n="weather.title">Mini weather app</h2>
-        <p class="lead" data-i18n="weather.lead">Accessible widget (keyboard + screen reader). Demo below.</p>
-
-        <form id="searchForm" class="wx-row" autocomplete="off" role="search" aria-label="Weather search form">
-          <label for="city" data-i18n="weather.label">City</label>
-          <input id="city" name="city" type="text" data-i18n-placeholder="weather.placeholder" placeholder="Montreal" required
-                 inputmode="search" aria-describedby="cityHelp" />
-          <button type="submit" id="submitBtn" data-i18n="weather.button">Get weather</button>
-          <button id="unitToggle" type="button" aria-pressed="false" aria-label="Switch to °F" title="weather.unitTitle" data-i18n-title="weather.unitTitle">°C</button>
-        </form>
-
-        <p id="cityHelp" class="sr-only" data-i18n="weather.cityHelp">Enter a city name then submit.</p>
-        <p id="srStatus" role="status" aria-live="polite" class="sr-only"></p>
-
-        <div id="result" class="wx-container" data-loading="false" aria-busy="false"></div>
-      </section>
-
-      <section id="todo" class="demo-block" aria-labelledby="todo-title">
-        <h2 id="todo-title" data-i18n="todo.title">To-do list</h2>
-        <p class="lead" data-i18n="todo.lead">Semantic list roles, focus handled, tasks persisted (localStorage).</p>
-
-        <div class="todo-app" role="application" aria-label="Task manager">
-          <form id="todo-form">
-            <label for="todo-input" class="visually-hidden" data-i18n="todo.add">Add</label>
-            <input id="todo-input" type="text" data-i18n-placeholder="todo.placeholder" placeholder="e.g., Call the pharmacy" />
-            <button type="submit" aria-label="Add task" data-i18n="todo.add">Add</button>
-          </form>
-
-          <ul id="todo-list" aria-label="Task list"></ul>
-          <p id="empty" class="empty" hidden data-i18n="todo.empty">No tasks ✨</p>
-          <p id="task-count" aria-live="polite"></p>
-        </div>
-      </section>
-
-      <section id="audit" class="outline-hover" aria-labelledby="audit-title">
-        <h2 id="audit-title" data-i18n="demos.audit.title">A11Y Audit — LGBTQIA+ media (anonymized)</h2>
-        <p class="lead" data-i18n="demos.audit.desc">
-          Date: September 23, 2025 — Method: manual tests (keyboard, VoiceOver), DOM inspection, quick checks (contrast, headings, ARIA).
-        </p>
-      </section>
-
-      <section id="features" class="outline-hover" aria-labelledby="features-title">
-        <h2 id="features-title">
-          <span data-i18n="features.title">Key features</span>
-          <span class="muted" data-i18n="features.soon">(coming soon)</span>
-        </h2>
-        <ul class="features-list">
-          <li data-i18n="features.reading">Reading mode</li>
-          <li data-i18n="features.break">Mental break button</li>
-          <li data-i18n="features.profiles">Persistent profiles</li>
-        </ul>
-      </section>
-      
-
-      <section id="about" class="outline-hover" aria-labelledby="about-title">
-        <h2 id="about-title" data-i18n="about.title">Our approach</h2>
-        <p data-i18n="about.p1">Human-centered design, user testing and privacy-by-default. This prototype is our learning workshop.</p>
-        <p data-i18n="about.p2">A pink circle, a white globe: a deliberate simplicity. Behind the clear form, a story of inclusivity and openness, with visual accessibility and minimalism at the core. Inspired by two icons: unapologetic freedom and tender honesty. A manifesto against judgment — from others, society, and ourselves.</p>
-        <p data-i18n="about.p3">It also signals my cosmopolitan personality and remote work, through a united and connected world. 🌍✨</p>
-        <p data-i18n="about.p4">Think in complex, ship in simple, keep humans at the center.</p>
-        <p data-i18n="about.p5">A subtle Memphis A11Y easter egg links the logo to the pink sound, like a calm and playful touch. 🎵🌸</p>
-      </section>
-
-      <form id="contact-form" action="https://formspree.io/f/xzzjbnkb" method="POST" aria-describedby="contact-help contact-status" novalidate>
-        <p id="contact-help" class="lead" data-i18n="contact.lead">Leave your email to be notified of updates.</p>
-
-        <label for="email" data-i18n="contact.email">Your email</label><br>
-        <div class="contact-row">
-          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
-          <button type="submit" id="contact-submit" data-i18n="contact.button">Send</button>
-        </div>
-
-        
-        <div class="sr-only" aria-hidden="true">
-          <label for="website">Do not fill</label>
-          <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
-        </div>
-
-        <p id="contact-status" class="sr-only" aria-live="polite"></p>
-      </form>
-    </main>
-<!-- DEPLOY-MARK: ABL-1007-1 -->
-<footer role="contentinfo">
-  <p class="footer-text">
-    © 2025 <strong>Adrien Calvez-Foubert</strong> — A11yBonjour •
-    <a class="footer-link"
-       href="https://www.linkedin.com/in/adrien-calvezfoubert"
-       target="_blank"
-       rel="noopener noreferrer me"
-       aria-label="Ouvrir le profil LinkedIn d’Adrien Calvez-Foubert">LinkedIn</a>
-  </p>
-</footer>
-
-
-  </div>
-
-  <button id="scrollTopBtn" class="scrolltop" aria-label="Back to top">↑</button>
-</body>
+    </aside>
+  </body>
 </html>
+
+
+
+
+
+
+
+
+
