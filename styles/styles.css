@@ -34,8 +34,11 @@ body {
   margin: 0;
   font: 400 1rem/1.65 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
   color: var(--text);
-  background: radial-gradient(1200px 800px at 50% -10%, #11141a 0%, var(--bg) 65%);
+  background-color: var(--bg); /* fallback solide */
+  background-image: radial-gradient(1000px 600px at 50% 10%, #11141a 0%, var(--bg) 70%);
+  background-attachment: fixed;
 }
+
 
 /* A11Y helpers */
 .visually-hidden { position: absolute !important; clip: rect(1px,1px,1px,1px); clip-path: inset(50%); height: 1px; width: 1px; overflow: hidden; white-space: nowrap; }
