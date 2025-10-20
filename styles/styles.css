@@ -287,3 +287,15 @@ a {
   /* Backdrop/popover : aucun voile global en mobile */
   [popover]::backdrop, dialog::backdrop { background: transparent !important; }
 }
+
+/* === TEST: border/ombre des cartes === */
+@media (hover: none) and (pointer: coarse) {
+  /* 1) On neutralise border + ombre pour voir si le "voile" disparaît */
+  .card {
+    border: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;  /* on garde le contenu visible */
+    outline: 2px solid rgba(255,0,0,.4) !important; /* repère visuel */
+  }
+}
+
