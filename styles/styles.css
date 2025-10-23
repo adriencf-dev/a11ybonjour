@@ -349,10 +349,14 @@ a {
 }
 
 
+
 .island {
   isolation: isolate;
-  contain: layout paint;
+  contain: paint;   
+  display: block;
+  width: 100%;
 }
+
 
 .section .cards{
   width:100%;
@@ -360,5 +364,4 @@ a {
   margin-inline:auto;
   min-width:0;     
 }
-.cards{ min-width:0; } 
-.card{ min-width:0; } 
+
