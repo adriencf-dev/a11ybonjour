@@ -67,7 +67,13 @@ body {
 /* Sections & layout */
 .section { padding: min(12vh, 8rem) 1.25rem; display: grid; place-items: center; }
 .section > * { max-width: var(--maxw); margin-inline: auto; }
-.section .cards { max-width: none; width: min(1200px, 100%); }
+/* ⬇️ PATCH Safari mac: centrage fiable du conteneur de cards (équiv. à min(1200px,100%)) */
+.section .cards {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  min-width: 0;
+}
 
 .hero .subtitle { color: var(--muted); margin: 0.25rem 0; }
 .lede { font-size: 1.125rem; color: var(--muted); }
@@ -86,6 +92,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: .75rem;
+  min-width: 0; /* garde-fou grid */
 }
 .card h3 { margin-top: 0; }
 
@@ -123,7 +130,7 @@ legend { padding: 0 .5rem; color: var(--muted); font-size: .95rem; }
 
 /* Text blocks */
 .demo-text.calm { letter-spacing: 0.01em; line-height: 1.85; }
-.breath blockquote { font-style: italic; color: var(--muted); border-left: 3px solid var(--accent); padding-left: .75rem; }
+.breath blockquote { font-style: italic; color: var(--muted); border-left: 3px solid #7DA7D9; padding-left: .75rem; }
 .prose { color: var(--text); }
 .manifest-list { display: grid; gap: .5rem; padding-left: 1rem; }
 .bridge { margin-top: var(--space-lg); color: var(--muted); font-size: 1.05rem; }
@@ -253,7 +260,6 @@ a {
 
 /* ===== MOBILE FIX (iOS + Android, toutes apps) ===== */
 @media (hover: none) and (pointer: coarse) {
-  
   html, body {
     background-attachment: scroll !important;
     background-repeat: no-repeat !important;
@@ -263,14 +269,12 @@ a {
     overflow-x: hidden !important;
   }
 
-  
   ::view-transition-old(root), 
   ::view-transition-new(root) {
     display: none !important;
     animation-duration: .001s !important;
   }
 
-  
   header, main, footer, .section, .cards, .card, .container, .wrapper, .site-footer {
     position: relative !important;
     z-index: 1 !important;
@@ -305,10 +309,8 @@ a {
     will-change: transform;
   }
 
-  
   fieldset { border: 0 !important; }
 
-  
   input, textarea, select {
     border: 1px solid #28303a !important;
     background-clip: padding-box !important;
@@ -341,11 +343,11 @@ a {
   }
   fieldset { border: 0 !important; }
 
-  
   input, textarea, select {
     border: 1px solid #28303a !important;
   }
 }
+
 
 .island {
   isolation: isolate;
