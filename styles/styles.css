@@ -67,13 +67,7 @@ body {
 /* Sections & layout */
 .section { padding: min(12vh, 8rem) 1.25rem; display: grid; place-items: center; }
 .section > * { max-width: var(--maxw); margin-inline: auto; }
-/* ⬇️ PATCH Safari mac: centrage fiable du conteneur de cards (équiv. à min(1200px,100%)) */
-.section .cards {
-  width: 100%;
-  max-width: 1200px;
-  margin-inline: auto;
-  min-width: 0;
-}
+.section .cards { max-width: none; width: min(1200px, 100%); }
 
 .hero .subtitle { color: var(--muted); margin: 0.25rem 0; }
 .lede { font-size: 1.125rem; color: var(--muted); }
@@ -92,7 +86,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: .75rem;
-  min-width: 0; /* garde-fou grid */
 }
 .card h3 { margin-top: 0; }
 
@@ -130,7 +123,7 @@ legend { padding: 0 .5rem; color: var(--muted); font-size: .95rem; }
 
 /* Text blocks */
 .demo-text.calm { letter-spacing: 0.01em; line-height: 1.85; }
-.breath blockquote { font-style: italic; color: var(--muted); border-left: 3px solid #7DA7D9; padding-left: .75rem; }
+.breath blockquote { font-style: italic; color: var(--muted); border-left: 3px solid var(--accent); padding-left: .75rem; }
 .prose { color: var(--text); }
 .manifest-list { display: grid; gap: .5rem; padding-left: 1rem; }
 .bridge { margin-top: var(--space-lg); color: var(--muted); font-size: 1.05rem; }
@@ -260,6 +253,7 @@ a {
 
 /* ===== MOBILE FIX (iOS + Android, toutes apps) ===== */
 @media (hover: none) and (pointer: coarse) {
+  
   html, body {
     background-attachment: scroll !important;
     background-repeat: no-repeat !important;
@@ -269,12 +263,14 @@ a {
     overflow-x: hidden !important;
   }
 
+  
   ::view-transition-old(root), 
   ::view-transition-new(root) {
     display: none !important;
     animation-duration: .001s !important;
   }
 
+  
   header, main, footer, .section, .cards, .card, .container, .wrapper, .site-footer {
     position: relative !important;
     z-index: 1 !important;
@@ -309,8 +305,10 @@ a {
     will-change: transform;
   }
 
+  
   fieldset { border: 0 !important; }
 
+  
   input, textarea, select {
     border: 1px solid #28303a !important;
     background-clip: padding-box !important;
@@ -343,25 +341,109 @@ a {
   }
   fieldset { border: 0 !important; }
 
+  
   input, textarea, select {
     border: 1px solid #28303a !important;
   }
 }
-
-
-
-.island {
-  isolation: isolate;
-  contain: paint;   
-  display: block;
-  width: 100%;
+@media (hover: none) and (pointer: coarse) {
+  .card * {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    background-clip: border-box !important;
+  }
 }
 
+/* ==== MOBILE CARD PAINT FIX (iOS/Android) ==== */
+/* ===== MOBILE FIX (iOS + Android, toutes apps) ===== */
+@media (hover: none) and (pointer: coarse) {
+  html, body {
+    background-attachment: scroll !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    width: 100%;
+    min-height: 100dvh;
+    overflow-x: hidden !important;
+  }
 
-.section .cards{
-  width:100%;
-  max-width:1200px;
-  margin-inline:auto;
-  min-width:0;     
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    display: none !important;
+    animation-duration: .001s !important;
+  }
+
+  header, main, footer, .section, .cards, .card, .container, .wrapper, .site-footer {
+    position: relative !important;
+    z-index: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    will-change: auto !important;
+  }
+  .card { contain: initial !important; }
+  .chapters, .aohzy, .toaster-stack { position: absolute !important; }
+  [popover]::backdrop, dialog::backdrop { background: transparent !important; }
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .card * {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    background-clip: border-box !important;
+  }
+}
+
+/* ==== MOBILE CARD PAINT FIX (iOS/Android) ==== */
+@media (hover: none) and (pointer: coarse) {
+  .cards { container-type: normal !important; }
+  .card {
+    border: none !important;
+    box-shadow:
+      0 10px 30px rgba(0,0,0,.35),
+      0 0 0 1px #1b2129 inset !important;
+    overflow: hidden !important;
+    background-clip: padding-box !important;
+    -webkit-transform: translateZ(0);
+    will-change: transform;
+  }
+
+  fieldset { border: 0 !important; }
+
+  input, textarea, select {
+    border: 1px solid #28303a !important;
+    background-clip: padding-box !important;
+  }
+}
+
+/* ===== MOBILE OVERRIDES: cards grid + card skin ===== */
+@media (hover: none) and (pointer: coarse) {
+  .cards {
+    grid-template-columns: 1fr !important;
+    gap: 0.875rem !important;
+    margin-top: 1rem !important;
+    container-type: normal !important;
+  }
+  .card {
+    border: none !important;
+    border-radius: var(--radius) !important;
+    overflow: hidden !important;
+    background: linear-gradient(180deg, #0f1318, #0b0d10) !important;
+    box-shadow:
+      0 10px 30px rgba(0,0,0,.35),
+      0 0 0 1px #1b2129 inset !important;
+    transform: none !important;
+    will-change: auto !important;
+    -webkit-transform: translateZ(0);
+    background-clip: padding-box !important;
+  }
+  .card * {
+    background-clip: padding-box !important;
+    box-shadow: none !important;
+  }
+  fieldset { border: 0 !important; }
+
+  input, textarea, select {
+    border: 1px solid #28303a !important;
+  }
+}
