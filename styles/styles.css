@@ -250,9 +250,10 @@ a {
 .cbx [role="combobox"][aria-expanded="true"] + [role="listbox"] { display: block; }
 .cbx [role="option"][data-active="true"] { background: #1a1f26; border-radius: 8px; }
 .cbx [role="option"] { padding: 6px 8px; cursor: pointer; }
+
 /* ===== MOBILE FIX (iOS + Android, toutes apps) ===== */
 @media (hover: none) and (pointer: coarse) {
-  /* Fond : pas d’effet 'fixed', fond scrollable et stable */
+  
   html, body {
     background-attachment: scroll !important;
     background-repeat: no-repeat !important;
@@ -262,14 +263,14 @@ a {
     overflow-x: hidden !important;
   }
 
-  /* View Transitions : on coupe les calques qui peuvent masquer le contenu */
+  
   ::view-transition-old(root), 
   ::view-transition-new(root) {
     display: none !important;
     animation-duration: .001s !important;
   }
 
-  /* Le contenu passe au-dessus, sans créer de nouveaux calques */
+  
   header, main, footer, .section, .cards, .card, .container, .wrapper, .site-footer {
     position: relative !important;
     z-index: 1 !important;
@@ -277,19 +278,10 @@ a {
     filter: none !important;
     will-change: auto !important;
   }
-
-  /* Les cartes ne créent pas de frontière de peinture (iOS glitch) */
   .card { contain: initial !important; }
-
-  /* Les éléments fixed deviennent absolute (pile plus saine en mobile) */
   .chapters, .aohzy, .toaster-stack { position: absolute !important; }
-
-  /* Backdrop/popover : aucun voile global en mobile */
   [popover]::backdrop, dialog::backdrop { background: transparent !important; }
 }
-
-
-/* ===== TEST 2 : neutralisation des bordures internes sur mobile ===== */
 @media (hover: none) and (pointer: coarse) {
   .card * {
     border: none !important;
@@ -301,25 +293,22 @@ a {
 
 /* ==== MOBILE CARD PAINT FIX (iOS/Android) ==== */
 @media (hover: none) and (pointer: coarse) {
-  /* 1) Pas de container queries sur la grille (bug de peinture iOS) */
   .cards { container-type: normal !important; }
-
-  /* 2) Cartes : remplacer le border par un faux-bord en inset (safe) */
   .card {
     border: none !important;
     box-shadow:
-      0 10px 30px rgba(0,0,0,.35),      /* ombre */
-      0 0 0 1px #1b2129 inset !important; /* faux-bord */
-    overflow: hidden !important;         /* clip des arrondis */
+      0 10px 30px rgba(0,0,0,.35),      
+      0 0 0 1px #1b2129 inset !important; 
+    overflow: hidden !important;        
     background-clip: padding-box !important;
-    -webkit-transform: translateZ(0);    /* stabilise la peinture iOS */
+    -webkit-transform: translateZ(0);    
     will-change: transform;
   }
 
-  /* 3) Fieldset : retire le vrai border (c'est souvent lui qui “étire”) */
+  
   fieldset { border: 0 !important; }
 
-  /* 4) Garde les contrôles lisibles (leur propre bordure reste OK) */
+  
   input, textarea, select {
     border: 1px solid #28303a !important;
     background-clip: padding-box !important;
@@ -327,42 +316,32 @@ a {
 }
 /* ===== MOBILE OVERRIDES: cards grid + card skin ===== */
 @media (hover: none) and (pointer: coarse) {
-  /* Grille: une colonne, pas de container queries (évite bugs iOS) */
   .cards {
     grid-template-columns: 1fr !important;
     gap: 0.875rem !important;
     margin-top: 1rem !important;
     container-type: normal !important;
   }
-
-  /* Cartes: faux-bord en inset + clip des arrondis, pas de vrai border */
   .card {
     border: none !important;
     border-radius: var(--radius) !important;
     overflow: hidden !important;
     background: linear-gradient(180deg, #0f1318, #0b0d10) !important;
-    /* ombre + faux-bord (n'engendre pas les “rails” verticaux) */
     box-shadow:
       0 10px 30px rgba(0,0,0,.35),
       0 0 0 1px #1b2129 inset !important;
-
-    /* stabilité peinture iOS */
     transform: none !important;
     will-change: auto !important;
     -webkit-transform: translateZ(0);
     background-clip: padding-box !important;
   }
-
-  /* Les blocs internes ne redessinent pas de “bordures étirées” */
   .card * {
     background-clip: padding-box !important;
-    box-shadow: none !important;     /* si un inner crée le “rail” */
+    box-shadow: none !important;    
   }
-
-  /* Fieldset souvent responsable des longues colonnes grises */
   fieldset { border: 0 !important; }
 
-  /* On garde un contour discret sur les champs pour l’UI */
+  
   input, textarea, select {
     border: 1px solid #28303a !important;
   }
