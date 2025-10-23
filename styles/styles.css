@@ -347,36 +347,24 @@ a {
   }
 }
 
-/* ===== LAB ISLANDS ===== */
+/* —— /lab islands—— */
 @media (hover: none) and (pointer: coarse) {
-  
-  :is([class*="island"], [id*="island"], [data-island]) {
-    position: relative !important;
-    isolation: isolate !important;
-    contain: layout paint !important;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    will-change: transform;
-  }
-
-  :is([class*="island"], [id*="island"], [data-island"]) .card {
+  .card:has([data-react-island]) {
     overflow: hidden !important;
     border-radius: var(--radius) !important;
-    background: linear-gradient(180deg, #0f1318, #0b0d10) !important;
-    box-shadow:
-      0 10px 30px rgba(0,0,0,.35),
-      0 0 0 1px #1b2129 inset !important;
     background-clip: padding-box !important;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+    isolation: isolate !important;
+    contain: layout paint !important;
     will-change: transform;
   }
 
-
-  :is([class*="island"], [id*="island"], [data-island"]) [popover]::backdrop,
-  :is([class*="island"], [id*="island"], [data-island"]) dialog::backdrop {
-    background: transparent !important;
+  [data-react-island] {
+    position: relative !important;
+    isolation: isolate !important;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    contain: layout paint !important;
   }
 }
-
-
