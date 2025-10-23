@@ -16,12 +16,20 @@
     },
     Neutral: {
       Warm:    { rate: 1.02, pitch: 1.02, volume: 1.0 },
-      Neutral: { rate: 1.00, pitch: 1.00, volume: 1.0 },
-      Night:   { rate: 0.96, pitch: 0.98, volume: 0.92 }
+      Neutral: { rate: 1.00, pitch: 0.99, volume: 1.0 }, 
+      Night:   { rate: 0.96, pitch: 0.96, volume: 0.92 }
     }
   };
 
   const RADIO_TO_TONE = { warm: 'Warm', neutral: 'Neutral', night: 'Night' };
+
+  const DENY_RE = /Zarvox|Trinoids|Bad News|Bahh|Boing|Bubbles|Bells|Cellos|Hysterical|Whisper|Albert|Pipe Organ|Princess|Junior|Kathy|Vicki|Deranged|Superstar|Good News|Eddy|Fred|Ralph|Tragedy/i;
+
+  const PREFERRED_VOICES = {
+    Masculine: ['Daniel','Alex','Thomas','Google UK English Male','Google US English'],
+    Feminine:  ['Samantha','Moira','Karen','Amélie','Amelie','Google UK English Female'],
+    Neutral:   ['Alex','Samantha','Daniel','Moira','Thomas'] 
+  };
 
   function preferredLangs() {
     const langs = [];
@@ -39,37 +47,57 @@
     return langs;
   }
 
+  function getVoicesSafe() {
+    const list = speechSynthesis.getVoices() || [];
+    return list.filter(v => !DENY_RE.test(v.name || ''));
+  }
+
   function scoreVoice(v, gender) {
     let s = 0;
-    if (v.localService) s += 3;
     const langs = preferredLangs();
     const vlang = (v.lang || '').toLowerCase();
+    if (v.localService) s += 3;
     if (langs.includes(vlang)) s += 4;
     if (langs.some(l => vlang.startsWith(l.split('-')[0]))) s += 2;
 
     const n = (v.name || '').toLowerCase();
-    const masculineHints = ['google uk english male','google us english','daniel','paul','thomas','alex','henry','oliver','george','charlie','liam','noah'];
-    const feminineHints  = ['amélie','amelie','julie','claire','victoria','samantha','serena','moira','google uk english female','google français','pauline','audrey','margaux','zoe','zoé','ava'];
-    const neutralHints   = ['alex','alloy','neutral','androg','alva'];
+    const mascHints = ['daniel','paul','thomas','alex','henry','oliver','george','charlie','liam','noah','google uk english male','google us english'];
+    const femHints  = ['samantha','moira','karen','amelie','amélie','julie','claire','victoria','serena','pauline','audrey','margaux','zoe','zoé','ava','google uk english female','google français'];
+    const neutHints = ['alex','samantha','daniel','moira','thomas'];
 
     const has = arr => arr.some(h => n.includes(h));
-    if (gender === 'Masculine' && has(masculineHints)) s += 5;
-    if (gender === 'Feminine'  && has(feminineHints))  s += 5;
-    if (gender === 'Neutral'   && (has(neutralHints) || n.includes('alex'))) s += 5;
+    if (gender === 'Masculine' && has(mascHints)) s += 5;
+    if (gender === 'Feminine'  && has(femHints))  s += 5;
+    if (gender === 'Neutral'   && has(neutHints)) s += 5;
 
-    if (langs[0]?.startsWith('fr') && vlang.startsWith('fr')) s += 2;
     return s;
   }
 
+  function pickByPreferredNames(voices, names, langs) {
+    for (const name of names) {
+      const candidates = voices.filter(v => (v.name || '').toLowerCase().includes(name.toLowerCase()));
+      if (!candidates.length) continue;
+      // si plusieurs, préférer la langue prioritaire
+      const exactLang = candidates.find(v => langs.includes((v.lang || '').toLowerCase()));
+      if (exactLang) return exactLang;
+      // sinon un localService
+      const local = candidates.find(v => v.localService);
+      if (local) return local;
+      return candidates[0];
+    }
+    return null;
+  }
+
   function pickVoice(gender = 'Neutral') {
-    const voices = speechSynthesis.getVoices();
-    if (!voices || !voices.length) return null;
-    const cleaned = voices.filter(v => {
-      const name = (v.name || '').toLowerCase();
-      return !name.includes('espeak');
-    });
+    const voices = getVoicesSafe();
+    if (!voices.length) return null;
+
+    const langs = preferredLangs();
+    const preferred = pickByPreferredNames(voices, PREFERRED_VOICES[gender] || [], langs);
+    if (preferred) return preferred;
+
     let best = null, bestScore = -Infinity;
-    for (const v of cleaned) {
+    for (const v of voices) {
       const sc = scoreVoice(v, gender);
       if (sc > bestScore) { bestScore = sc; best = v; }
     }
@@ -78,20 +106,21 @@
 
   function speakNarrator(text, { voiceType='Neutral', tone='Neutral' } = {}) {
     if (!('speechSynthesis' in window)) return;
-    const u = new SpeechSynthesisUtterance(text || 'Bonjour, je suis A11yBonjour.');
+    const u = new SpeechSynthesisUtterance(
+      text || (document.documentElement.lang?.startsWith('fr') ? 'Bonjour, je suis A11yBonjour.' : 'Hello, I am A11yBonjour.')
+    );
     const preset = (NAR_PRESETS[voiceType] || NAR_PRESETS.Neutral)[tone] || NAR_PRESETS.Neutral.Neutral;
     u.rate   = preset.rate;
     u.pitch  = preset.pitch;
     u.volume = preset.volume;
 
-    const langs = preferredLangs();
-    const preferFr = langs.some(l => l.startsWith('fr'));
-    u.lang = preferFr ? 'fr-FR' : (langs[0] || 'en-US');
-
     const v = pickVoice(voiceType);
     if (v) {
       u.voice = v;
       if (v.lang) u.lang = v.lang;
+    } else {
+      const langs = preferredLangs();
+      u.lang = (langs[0] || 'en-GB');
     }
 
     speechSynthesis.cancel();
@@ -137,11 +166,13 @@
   function initWhenVoicesReady() {
     if (speechSynthesis.getVoices().length) {
       mountNarratorControls();
-    } else {
+    } else if ('onvoiceschanged' in speechSynthesis) {
       speechSynthesis.onvoiceschanged = () => {
         speechSynthesis.onvoiceschanged = null;
         mountNarratorControls();
       };
+    } else {
+      setTimeout(mountNarratorControls, 600);
     }
   }
 
