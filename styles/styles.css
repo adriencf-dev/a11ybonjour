@@ -354,3 +354,11 @@ a {
   contain: layout paint;
 }
 
+.section .cards{
+  width:100%;
+  max-width:1200px;
+  margin-inline:auto;
+  min-width:0;     
+}
+.cards{ min-width:0; } 
+.card{ min-width:0; } 
