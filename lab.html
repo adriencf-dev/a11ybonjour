@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>A11yBonjour /lab — Islands & Modern Web APIs</title>
     <meta name="description" content="Calm site, tech proofs. React as islands + modern web APIs with graceful fallbacks." />
-    <link rel="stylesheet" href="/styles/styles.css?v=20251020-12">
+    <link rel="preload" href="styles/styles.css" as="style" />
+    <link rel="stylesheet" href="styles/styles.css" />
     <script>document.documentElement.classList.remove('no-js');</script>
     <link rel="preconnect" href="https://unpkg.com" crossorigin>
     <script type="module" src="js/scripts.js"></script>
@@ -19,7 +20,7 @@
 
 
   </head>
-  <body>
+  <body class="lab">
     <nav class="skip" aria-label="Skip links">
       <a href="#main">Skip to content</a>
       <a href="#tech">Skip to tech sheet</a>
@@ -33,13 +34,13 @@
 
     <main id="main">
       <!-- React Islands (each with an accessible HTML fallback) -->
-      <section id="lab" class="section lab" aria-labelledby="lab-title">
-        <h2 id="lab-title">React islands (with HTML fallbacks)</h2>
+      <section id="islands" class="section" aria-labelledby="islands-title">
+        <h2 id="islands-title">React islands (with HTML fallbacks)</h2>
+        
         <div class="cards" role="list">
           <article class="card" role="listitem">
             <h3>Accessible Dialog</h3>
-            <div class="island" data-react-island="A11yDialog">
-
+            <div data-react-island="A11yDialog">
               <!-- Fallback via Popover API -->
               <button class="btn" popovertarget="demo-dialog" aria-haspopup="dialog" aria-controls="demo-dialog">Open dialog</button>
               <div id="demo-dialog" popover role="dialog" aria-modal="true" aria-labelledby="demo-title">
@@ -52,8 +53,7 @@
 
           <article class="card" role="listitem">
             <h3>Combobox / Command</h3>
-            <div class="island" data-react-island="A11yToaster">
-
+            <div data-react-island="A11yCombo">
               <!-- Fallback: labeled input + datalist -->
               <label for="combo-fallback">Find component</label>
               <input id="combo-fallback" list="components" autocomplete="off" />
@@ -66,8 +66,7 @@
 
           <article class="card" role="listitem">
             <h3>Toaster (polite)</h3>
-          <div class="island" data-react-island="A11yToaster">
-
+            <div data-react-island="A11yToaster">
               <!-- Fallback: aria-live polite region -->
               <button class="btn" data-fallback-toast>Show message</button>
               <p class="visually-hidden" aria-live="polite" id="toast-region">Ready.</p>
@@ -122,3 +121,4 @@
   
   </body>
 </html>
+
